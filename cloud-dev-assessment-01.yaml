@@ -57,18 +57,30 @@ Resources:
       - Key: Name
         Value: !Sub ${AWS::StackName}-Private-B
 
-  ElasticIPAddress:
+  ElasticIPAddressA:
     Type: AWS::EC2::EIP
     Properties:
       Domain: VPC
-  NATGateway:
+  NATGatewayA:
     Type: AWS::EC2::NatGateway
-    Properties: 
-      AllocationId: !GetAtt ElasticIPAddress.AllocationId
+    Properties:
+      AllocationId: !GetAtt ElasticIPAddressA.AllocationId
       SubnetId: !Ref PublicSubnetA
-      Tags: 
+      Tags:
       - Key: Name
-        Value: !Sub NAT-${AWS::StackName}
+        Value: !Sub NAT-A-${AWS::StackName}
+  ElasticIPAddressB:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: VPC
+  NATGatewayB:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt ElasticIPAddressB.AllocationId
+      SubnetId: !Ref PublicSubnetB
+      Tags:
+      - Key: Name
+        Value: !Sub NAT-B-${AWS::StackName}
 
   PublicRouteTable:
     Type: AWS::EC2::RouteTable
@@ -82,29 +94,36 @@ Resources:
     DependsOn: AttachGateway
     Properties:
       RouteTableId: !Ref PublicRouteTable
-      DestinationCidrBlock: 192.168.0.0/16
-      GatewayId: !Ref igw
-  PublicRoute2:
-    Type: AWS::EC2::Route
-    DependsOn: AttachGateway
-    Properties:
-      RouteTableId: !Ref PublicRouteTable
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: !Ref igw
 
-  PrivateRouteTable:
+  PrivateRouteTableA:
     Type: AWS::EC2::RouteTable
     Properties:
       VpcId: !Ref VPC
       Tags:
       - Key: Name
-        Value: Private
-  PrivateRoute1:
+        Value: PrivateRT-A
+  PrivateRouteA1:
     Type: AWS::EC2::Route
     Properties:
-      RouteTableId: !Ref PrivateRouteTable
+      RouteTableId: !Ref PrivateRouteTableA
       DestinationCidrBlock: 0.0.0.0/0
-      NatGatewayId: !Ref NATGateway
+      NatGatewayId: !Ref NATGatewayA
+
+  PrivateRouteTableB:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value: PrivateRT-B
+  PrivateRouteB1:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTableB
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NATGatewayB
 
   PublicSubnetARouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
@@ -120,9 +139,289 @@ Resources:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       SubnetId: !Ref PrivateSubnetA
-      RouteTableId: !Ref PrivateRouteTable
+      RouteTableId: !Ref PrivateRouteTableA
   PrivateSubnetBRouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       SubnetId: !Ref PrivateSubnetB
-      RouteTableId: !Ref PrivateRouteTable
+      RouteTableId: !Ref PrivateRouteTableB
+
+  DBSubnetGroup:
+    Type: "AWS::RDS::DBSubnetGroup"
+    Properties:
+      DBSubnetGroupDescription: "Subnet Group"
+      SubnetIds:
+      - !Ref "PrivateSubnetA"
+      - !Ref "PrivateSubnetB"
+  RDSAccessSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Instance to RDS Access
+      VpcId:
+        Ref: VPC
+  AccessSecurityGroupIngress:
+    Type: AWS::EC2::SecurityGroupIngress
+    DependsOn: RDSAccessSecurityGroup
+    Properties:
+      GroupId:
+        Ref: RDSAccessSecurityGroup
+      IpProtocol: tcp
+      FromPort: "0"
+      ToPort: "65535"
+      SourceSecurityGroupId:
+        Ref: RDSAccessSecurityGroup
+  rdsInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      AllocatedStorage: '20'
+      AutoMinorVersionUpgrade: true
+      CopyTagsToSnapshot: true
+      DBInstanceClass: db.t3.micro
+      DBInstanceIdentifier:
+        !Sub ${AWS::StackName}-acg-rds-instance
+      DBName: cloud_dev_assesment_db
+      Engine: mariadb
+      MasterUsername: ironman123
+      MasterUserPassword: ironman123
+      MultiAZ: false
+      AvailabilityZone: ap-southeast-1b
+      Port: '3306'
+      DBSubnetGroupName: !Ref "DBSubnetGroup"
+      VPCSecurityGroups:
+      - Ref: RDSAccessSecurityGroup
+  rdsReadReplicaInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceClass: db.t3.micro
+      AllocatedStorage: '20'
+      CopyTagsToSnapshot: true
+      DBInstanceIdentifier:
+        !Sub ${AWS::StackName}-acg-read-replica-rds-instance
+      SourceDBInstanceIdentifier: !Ref rdsInstance
+      MultiAZ: false
+      AvailabilityZone: ap-southeast-1a
+
+  WebServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: web-server-sg
+      GroupDescription: Allow SSH and HTTP
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: 0.0.0.0/0
+
+  Ec2LaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: Ec2AutoScaling
+      LaunchTemplateData:
+        ImageId: ami-04a5ce820a419d6da
+        #ImageId: ami-0bfddf4206f1fa7b9
+        InstanceType: t2.micro
+        KeyName: vpc-learn-01
+        NetworkInterfaces:
+          - DeviceIndex: 0
+            AssociatePublicIpAddress: false
+            Groups:
+              - !Ref WebServerSecurityGroup
+        UserData:
+          Fn::Base64: !Sub |
+            #!/bin/bash
+            sudo yum update -y
+            sudo amazon-linux-extras install epel -y
+            sudo yum install stress -y
+            sudo yum install -y httpd
+            sudo systemctl start httpd
+            sudo systemctl enable httpd
+            sudo echo "<h1>Cloud Formation Assessment</h1>" > /var/www/html/index.html
+
+  AutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      MinSize: '2'
+      MaxSize: '2'
+      DesiredCapacity: '2'
+      LaunchTemplate:
+        LaunchTemplateId: !Ref Ec2LaunchTemplate
+        Version: !GetAtt Ec2LaunchTemplate.LatestVersionNumber
+      HealthCheckType: ELB
+      VPCZoneIdentifier:
+        - !Ref PrivateSubnetB
+      TargetGroupARNs:
+        - !Ref NetworkLoadBalancerTargetGroup
+
+  cpuUsage:
+    Type: AWS::AutoScaling::ScalingPolicy
+    Properties:
+      AutoScalingGroupName: !Ref AutoScalingGroup
+      PolicyType: TargetTrackingScaling
+      TargetTrackingConfiguration:
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ASGAverageCPUUtilization
+        TargetValue: 50
+
+  ScalingPolicy:
+    Type: 'AWS::AutoScaling::ScalingPolicy'
+    Properties:
+      AdjustmentType: ChangeInCapacity
+      AutoScalingGroupName: !Ref AutoScalingGroup
+      ScalingAdjustment: '1'
+
+  NetworkLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: !Join ["-" , [!Ref 'AWS::StackName', NLB]]
+      Scheme: internet-facing
+      Subnets:
+        - !Ref PublicSubnetA
+        - !Ref PublicSubnetB
+      Type: network
+      SecurityGroups:
+      - !Ref WebServerSecurityGroup
+  NetworkLoadBalancerTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Join ["-" , [!Ref 'AWS::StackName', Target]]
+      Port: 80
+      Protocol: TCP
+      VpcId: !Ref VPC
+      HealthCheckEnabled: True
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPort: 80
+      HealthCheckProtocol: TCP
+      HealthCheckTimeoutSeconds: 10
+      HealthyThresholdCount: 3
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: 60
+      TargetType: instance
+  NetworkLoadBalancerListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref NetworkLoadBalancerTargetGroup
+      LoadBalancerArn: !Ref NetworkLoadBalancer
+      Port: '80'
+      Protocol: TCP
+
+  S3Bucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: cloud-dev-assessment-oac
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+  AssetsBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref S3Bucket
+      PolicyDocument:
+        Statement:
+        - Action: s3:GetObject
+          Effect: Allow
+          Resource: !Sub ${S3Bucket.Arn}/*
+          Principal:
+            Service: cloudfront.amazonaws.com
+          Condition:
+            StringEquals:
+              AWS:SourceArn: !Sub arn:aws:cloudfront::${AWS::AccountId}:distribution/${AssetsDistribution}
+              #AWS:SourceArn: !Sub arn:aws:cloudfront::${AWS::AccountId}:distribution/_AssetsDistribution_
+        - Effect: Deny
+          Principal: '*'
+          Action: 's3:*'
+          Resource:
+            - !Sub ${S3Bucket.Arn}/*
+            - !GetAtt S3Bucket.Arn
+          Condition:
+            Bool:
+              aws:SecureTransport: false
+
+  AssetsDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+        - Id: S3Origin
+          DomainName: !GetAtt S3Bucket.DomainName
+          S3OriginConfig:
+            OriginAccessIdentity: ''
+          OriginAccessControlId: !GetAtt CloudFrontOriginAccessControl.Id
+        - Id: NlbOrigin
+          DomainName: !GetAtt NetworkLoadBalancer.DNSName
+          CustomOriginConfig:
+            HTTPPort: '80'
+            OriginProtocolPolicy: http-only
+        Enabled: true
+        DefaultRootObject: index.html
+        Comment: !Sub ${AWS::StackName} distribution
+        DefaultCacheBehavior:
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
+          TargetOriginId: S3Origin
+          ViewerProtocolPolicy: redirect-to-https
+        HttpVersion: http2
+        ViewerCertificate:
+          CloudFrontDefaultCertificate: true
+        IPV6Enabled: false
+
+  CloudFrontOriginAccessControl:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Description: Default Origin Access Control
+        Name: !Ref AWS::StackName
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+
+  Ec2SsmHostInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${AWS::StackName}-iam-role
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+
+  Ec2SsmHostInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      InstanceProfileName: !Sub ${AWS::StackName}-instance-profile
+      Path: /
+      Roles: [ !Ref Ec2SsmHostInstanceRole ]
+
+  Ec2SsmHostSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: !Sub Security Group for ${AWS::StackName} EC2 instances in VPC
+      VpcId: !Ref VPC
+
+  Ec2SsmHostInPublicSubnet:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-04a5ce820a419d6da
+      InstanceType: t2.micro
+      # KeyName: NO SSH Key needed
+      IamInstanceProfile: !Ref Ec2SsmHostInstanceProfile
+      NetworkInterfaces:
+        # Here the instance is in a public subnet with a public IP so we can connect
+        # directly to SSM's public endpoint
+        - AssociatePublicIpAddress: true
+          DeviceIndex: 0
+          GroupSet:
+            - !Ref Ec2SsmHostSecurityGroup
+          SubnetId: !Ref PublicSubnetA
