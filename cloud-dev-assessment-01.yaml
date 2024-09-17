@@ -371,7 +371,7 @@ Resources:
           S3OriginConfig:
             OriginAccessIdentity: ''
           OriginAccessControlId: !GetAtt CloudFrontOriginAccessControl.Id
-        - Id: NlbOrigin
+        - Id: NlbOrigin1
           DomainName: !GetAtt NetworkLoadBalancer.DNSName
           CustomOriginConfig:
             OriginProtocolPolicy: match-viewer
@@ -380,13 +380,14 @@ Resources:
         Comment: !Sub ${AWS::StackName} distribution
         DefaultCacheBehavior:
           CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
-          TargetOriginId: NlbOrigin
+          TargetOriginId: NlbOrigin1
           ViewerProtocolPolicy: allow-all
         CacheBehaviors:
         - PathPattern: /s3/*
           CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
           TargetOriginId: S3Origin
           ViewerProtocolPolicy: redirect-to-https
+          MinTTL: '500'
         HttpVersion: http2
         ViewerCertificate:
           CloudFrontDefaultCertificate: true
