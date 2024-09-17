@@ -1,11 +1,12 @@
 
-
+```
 aws cloudformation deploy \
       --stack-name MyVPC6 \
       --capabilities CAPABILITY_NAMED_IAM \
       --template-file cloud-dev-assessment-01.yaml
+```
 
-
+```
 aws ssm start-session \
     --target i-059b5ee5d5cb7dc9e \
     --document-name AWS-StartPortForwardingSessionToRemoteHost \
@@ -36,4 +37,4 @@ aws ssm start-session \
     --target i-059b5ee5d5cb7dc9e \
     --document-name AWS-StartPortForwardingSessionToRemoteHost \
     --parameters host="myvpc6-acg-read-replica-rds-instance.cis0e5kajlrt.ap-southeast-1.rds.amazonaws.com",portNumber="3306",localPortNumber="8093"
-
+```
