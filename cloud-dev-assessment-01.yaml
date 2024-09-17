@@ -159,17 +159,29 @@ Resources:
       GroupDescription: Instance to RDS Access
       VpcId:
         Ref: VPC
-  AccessSecurityGroupIngress:
+  AccessSecurityGroupIngressWebServer:
     Type: AWS::EC2::SecurityGroupIngress
     DependsOn: RDSAccessSecurityGroup
     Properties:
       GroupId:
         Ref: RDSAccessSecurityGroup
       IpProtocol: tcp
-      FromPort: "0"
-      ToPort: "65535"
+      FromPort: "3306"
+      ToPort: "3306"
       SourceSecurityGroupId:
+        Ref: WebServerSecurityGroup
+  AccessSecurityGroupIngressSsmHost:
+    Type: AWS::EC2::SecurityGroupIngress
+    DependsOn: RDSAccessSecurityGroup
+    Properties:
+      GroupId:
         Ref: RDSAccessSecurityGroup
+      IpProtocol: tcp
+      FromPort: "3306"
+      ToPort: "3306"
+      SourceSecurityGroupId:
+        Ref: Ec2SsmHostSecurityGroup
+
   rdsInstance:
     Type: AWS::RDS::DBInstance
     Properties:
