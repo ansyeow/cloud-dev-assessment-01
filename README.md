@@ -1,7 +1,7 @@
 
 
 aws cloudformation deploy \
-      --stack-name MyVPC \
+      --stack-name MyVPC6 \
       --capabilities CAPABILITY_NAMED_IAM \
       --template-file cloud-dev-assessment-01.yaml
 
@@ -9,22 +9,22 @@ aws cloudformation deploy \
 aws ssm start-session \
     --target i-059b5ee5d5cb7dc9e \
     --document-name AWS-StartPortForwardingSessionToRemoteHost \
-    --parameters host="192.168.60.32",portNumber="80",localPortNumber="8080"
+    --parameters host="192.168.60.29",portNumber="80",localPortNumber="8080"
 
 aws ssm start-session \
     --target i-059b5ee5d5cb7dc9e \
     --document-name AWS-StartPortForwardingSessionToRemoteHost \
-    --parameters host="192.168.60.169",portNumber="80",localPortNumber="8090"
+    --parameters host="192.168.60.46",portNumber="80",localPortNumber="8090"
 
 aws ssm start-session \
     --target i-059b5ee5d5cb7dc9e \
     --document-name AWS-StartPortForwardingSessionToRemoteHost \
-    --parameters host="192.168.60.32",portNumber="22",localPortNumber="8081"
+    --parameters host="192.168.60.29",portNumber="22",localPortNumber="8081"
 
 aws ssm start-session \
     --target i-059b5ee5d5cb7dc9e \
     --document-name AWS-StartPortForwardingSessionToRemoteHost \
-    --parameters host="192.168.60.169",portNumber="22",localPortNumber="8091"
+    --parameters host="192.168.60.46",portNumber="22",localPortNumber="8091"
 
 
 aws ssm start-session \
