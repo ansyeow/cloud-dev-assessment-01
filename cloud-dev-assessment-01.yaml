@@ -371,8 +371,7 @@ Resources:
         - Id: NlbOrigin
           DomainName: !GetAtt NetworkLoadBalancer.DNSName
           CustomOriginConfig:
-            HTTPPort: '80'
-            OriginProtocolPolicy: http-only
+            OriginProtocolPolicy: match-viewer
         Enabled: true
         DefaultRootObject: index.html
         Comment: !Sub ${AWS::StackName} distribution
