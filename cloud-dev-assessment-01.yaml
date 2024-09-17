@@ -252,7 +252,10 @@ Resources:
             sudo yum install -y httpd
             sudo systemctl start httpd
             sudo systemctl enable httpd
-            sudo echo "<h1>Cloud Formation Assessment</h1>" > /var/www/html/index.html
+            cat | sudo tee /var/www/html/index.html <<EOF
+            <h1>Cloud Formation Assessment</h1>
+            <a href="/s3/README.md">/s3/README.md</a>
+            EOF
 
   AutoScalingGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
@@ -376,6 +379,11 @@ Resources:
         DefaultRootObject: index.html
         Comment: !Sub ${AWS::StackName} distribution
         DefaultCacheBehavior:
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
+          TargetOriginId: NlbOrigin
+          ViewerProtocolPolicy: allow-all
+        CacheBehaviors:
+        - PathPattern: /s3/*
           CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
           TargetOriginId: S3Origin
           ViewerProtocolPolicy: redirect-to-https
