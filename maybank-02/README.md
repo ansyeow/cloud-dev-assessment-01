@@ -63,6 +63,14 @@ kubectl apply -f 02-03-ingress.yaml
 
 * https://devopscube.com/configure-ingress-tls-kubernetes/
 
+## Inject K8s Secret Into Pod Via Environment Variable
+
+### Setup Sinatra (Ruby)
+
+* https://hub.docker.com/r/tongueroo/sinatra
+* https://github.com/tongueroo/demo-sinatra/blob/main/sinatra_app.rb
+* https://github.com/tongueroo/demo-sinatra/blob/main/views/index.erb
+
 
 # Refs
 
