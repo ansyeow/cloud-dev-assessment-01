@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: maybank-cloud-assessment-02-ns
-  labels:
-    name: maybank-cloud-assessment-02-ns
