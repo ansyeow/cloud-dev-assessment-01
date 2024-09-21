@@ -7,7 +7,7 @@ spec:
   selector:
     matchLabels:
       app: sinatra
-  replicas: 0
+  replicas: 2
   template:
     metadata:
       labels:
@@ -18,13 +18,14 @@ spec:
         image: "tongueroo/sinatra"
         ports:
         - containerPort: 8080
-        # envFrom:
-        # - secretRef:
-            # name: backend-cred-01
-          # prefix: BACKEND_01_
+        envFrom:
+        - secretRef:
+            name: backend-cred-01
+          prefix: BACKEND_01_
+        # volumeMounts:
+        # - name: sinatra-app-files-volume
+          # mountPath: /app
         volumeMounts:
-        - name: sinatra-app-files-volume
-          mountPath: /app
         - name: sinatra-app-views-files-volume
           mountPath: /app/views
       volumes:

@@ -64,6 +64,8 @@ data:
       <img src="/jelly-beans.jpg" />
       <pre>
         Client IP: <%= request.ip %>
+        ENV['BACKEND_01_USERNAME']: <%= ENV['BACKEND_01_USERNAME'] %>
+        ENV['BACKEND_01_PASSWORD']: <%= ENV['BACKEND_01_PASSWORD'] %>
       </pre>
     </body>
     </html>
