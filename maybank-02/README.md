@@ -53,7 +53,9 @@ kubectl create -f https://raw.githubusercontent.com/techiescamp/nginx-ingress-co
 ## Setup Ingress TLS
 
 ```
-kubectl create -f 02-01-hello-app.yaml
+kubectl create ns dev
+kubectl create -f 02-01a-hello-app.yaml
+kubectl create -f 02-01b-sinatra-app.yaml
 kubectl create -f 02-02-secret.yaml
 kubectl create -f 02-03-ingress.yaml
 ```

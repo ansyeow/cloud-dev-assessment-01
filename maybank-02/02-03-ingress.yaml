@@ -20,3 +20,10 @@ spec:
               name: hello-service
               port:
                 number: 80
+        - pathType: Prefix
+          path: "/sinatra"
+          backend:
+            service:
+              name: sinatra-service
+              port:
+                number: 80

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sinatra-app
+  namespace: dev
+spec:
+  selector:
+    matchLabels:
+      app: sinatra
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: sinatra
+    spec:
+      containers:
+      - name: sinatra
+        image: "gcr.io/google-samples/hello-app:2.0"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: sinatra-service
+  namespace: dev
+  labels:
+    app: sinatra
+spec:
+  type: ClusterIP
+  selector:
+    app: sinatra
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
