@@ -39,6 +39,8 @@ data:
         puts "#{Time.now} - #{client_ip} - #{request_host} - #{server_hostname} -GET /#{formatted_params}"
         # puts "some message with a newline\nand more text"
 
+        puts "test 123 ..."
+
         erb :index
       end
     end

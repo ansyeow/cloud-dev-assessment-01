@@ -22,16 +22,19 @@ spec:
         - secretRef:
             name: backend-cred-01
           prefix: BACKEND_01_
-        # volumeMounts:
-        # - name: sinatra-app-files-volume
-          # mountPath: /app
         volumeMounts:
+        - name: sinatra-app-files-volume
+          mountPath: /app/sinatra_app.rb
+          subPath: sinatra_app.rb
         - name: sinatra-app-views-files-volume
           mountPath: /app/views
       volumes:
       - name: sinatra-app-files-volume
         configMap:
           name: sinatra-app-files
+          items:
+          - key: sinatra_app.rb
+            path: sinatra_app.rb
       - name: sinatra-app-views-files-volume
         configMap:
           name: sinatra-app-views-files
