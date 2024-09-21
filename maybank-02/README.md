@@ -1,7 +1,7 @@
 
 # Setup EKS Cluster
 
-```
+```bash
 eksctl create cluster -f cluster.yaml
 
 eksctl create nodegroup --config-file=cluster.yaml
@@ -9,7 +9,7 @@ eksctl create nodegroup --config-file=cluster.yaml
 
 # Setup kubectl
 
-```
+```bash
 aws eks update-kubeconfig --name maybank-cloud-assessment-02
 ```
 
@@ -19,7 +19,7 @@ https://devopscube.com/setup-ingress-kubernetes-nginx-controller
 
 Update `nginx-ingress-controller-main/manifests/services.yaml`
 
-```
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -29,7 +29,7 @@ metadata:
     service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
 ```
 
-```
+```bash
 kubectl create ns ingress-nginx
 kubectl create -f https://raw.githubusercontent.com/techiescamp/nginx-ingress-controller/refs/heads/main/manifests/admission-service-account.yaml
 kubectl create -f https://raw.githubusercontent.com/techiescamp/nginx-ingress-controller/refs/heads/main/manifests/validating-webhook.yaml
