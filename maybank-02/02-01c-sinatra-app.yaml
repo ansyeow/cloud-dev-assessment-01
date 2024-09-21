@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sinatra-app
+  namespace: dev
+spec:
+  selector:
+    matchLabels:
+      app: sinatra
+  replicas: 0
+  template:
+    metadata:
+      labels:
+        app: sinatra
+    spec:
+      containers:
+      - name: sinatra
+        image: "tongueroo/sinatra"
+        ports:
+        - containerPort: 8080
+        # envFrom:
+        # - secretRef:
+            # name: backend-cred-01
+          # prefix: BACKEND_01_
+        volumeMounts:
+        - name: sinatra-app-files-volume
+          mountPath: /app
+        - name: sinatra-app-views-files-volume
+          mountPath: /app/views
+      volumes:
+      - name: sinatra-app-files-volume
+        configMap:
+          name: sinatra-app-files
+      - name: sinatra-app-views-files-volume
+        configMap:
+          name: sinatra-app-views-files
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: sinatra-service
+  namespace: dev
+  labels:
+    app: sinatra
+spec:
+  type: ClusterIP
+  selector:
+    app: sinatra
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP

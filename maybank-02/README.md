@@ -55,7 +55,8 @@ kubectl apply -f https://raw.githubusercontent.com/techiescamp/nginx-ingress-con
 ```
 kubectl create ns dev
 kubectl apply -f 02-01a-hello-app.yaml
-kubectl apply -f 02-01b-sinatra-app.yaml
+kubectl apply -f 02-01b-sinatra-configmap.yaml
+kubectl apply -f 02-01c-sinatra-app.yaml
 kubectl apply -f 02-02-secret.yaml
 kubectl apply -f 02-03-ingress.yaml
 ```
