@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: sinatra-main-app-file
+  name: sinatra-app-files
   namespace: dev
 data:
   sinatra_app.rb: |
@@ -33,6 +33,31 @@ data:
 
 ---
 
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sinatra-app-views-files
+  namespace: dev
+data:
+  index.erb: |
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <title>Sinatra Demo</title>
+      <link rel="stylesheet" href="/styles.css">
+    </head>
+    <body>
+      <h1>Hello, Sinatra! Test 1</h1>
+      <img src="/jelly-beans.jpg" />
+      <pre>
+        Client IP: <%= request.ip %>
+      </pre>
+    </body>
+    </html>
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -54,12 +79,18 @@ spec:
         ports:
         - containerPort: 8080
         volumeMounts:
-        - name: sinatra-main-app-file-volume
+        - name: sinatra-app-files-volume
           mountPath: /app
+        volumeMounts:
+        - name: sinatra-app-views-files-volume
+          mountPath: /app/views
       volumes:
-        - name: sinatra-main-app-file-volume
+        - name: sinatra-app-files-volume
           configMap:
-            name: sinatra-main-app-file
+            name: sinatra-app-files
+        - name: sinatra-app-views-files-volume
+          configMap:
+            name: sinatra-app-views-files
 
 ---
 
