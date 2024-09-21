@@ -33,14 +33,14 @@ metadata:
 
 ```
 kubectl create ns ingress-nginx
-kubectl create -f https://raw.githubusercontent.com/techiescamp/nginx-ingress-controller/refs/heads/main/manifests/admission-service-account.yaml
-kubectl create -f https://raw.githubusercontent.com/techiescamp/nginx-ingress-controller/refs/heads/main/manifests/validating-webhook.yaml
-kubectl create -f https://raw.githubusercontent.com/techiescamp/nginx-ingress-controller/refs/heads/main/manifests/jobs.yaml
-kubectl create -f https://raw.githubusercontent.com/techiescamp/nginx-ingress-controller/refs/heads/main/manifests/ingress-service-account.yaml
-kubectl create -f https://raw.githubusercontent.com/techiescamp/nginx-ingress-controller/refs/heads/main/manifests/configmap.yaml
-kubectl create -f nginx-ingress-controller-main/manifests/services.yaml
-kubectl create -f https://raw.githubusercontent.com/techiescamp/nginx-ingress-controller/refs/heads/main/manifests/ingressclass.yaml
-kubectl create -f https://raw.githubusercontent.com/techiescamp/nginx-ingress-controller/refs/heads/main/manifests/deployment.yaml
+kubectl apply -f https://raw.githubusercontent.com/techiescamp/nginx-ingress-controller/refs/heads/main/manifests/admission-service-account.yaml
+kubectl apply -f https://raw.githubusercontent.com/techiescamp/nginx-ingress-controller/refs/heads/main/manifests/validating-webhook.yaml
+kubectl apply -f https://raw.githubusercontent.com/techiescamp/nginx-ingress-controller/refs/heads/main/manifests/jobs.yaml
+kubectl apply -f https://raw.githubusercontent.com/techiescamp/nginx-ingress-controller/refs/heads/main/manifests/ingress-service-account.yaml
+kubectl apply -f https://raw.githubusercontent.com/techiescamp/nginx-ingress-controller/refs/heads/main/manifests/configmap.yaml
+kubectl apply -f nginx-ingress-controller-main/manifests/services.yaml
+kubectl apply -f https://raw.githubusercontent.com/techiescamp/nginx-ingress-controller/refs/heads/main/manifests/ingressclass.yaml
+kubectl apply -f https://raw.githubusercontent.com/techiescamp/nginx-ingress-controller/refs/heads/main/manifests/deployment.yaml
 ```
 
 # Dev
@@ -54,10 +54,10 @@ kubectl create -f https://raw.githubusercontent.com/techiescamp/nginx-ingress-co
 
 ```
 kubectl create ns dev
-kubectl create -f 02-01a-hello-app.yaml
-kubectl create -f 02-01b-sinatra-app.yaml
-kubectl create -f 02-02-secret.yaml
-kubectl create -f 02-03-ingress.yaml
+kubectl apply -f 02-01a-hello-app.yaml
+kubectl apply -f 02-01b-sinatra-app.yaml
+kubectl apply -f 02-02-secret.yaml
+kubectl apply -f 02-03-ingress.yaml
 ```
 
 * https://devopscube.com/configure-ingress-tls-kubernetes/
