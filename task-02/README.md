@@ -43,6 +43,13 @@ kubectl apply -f https://raw.githubusercontent.com/techiescamp/nginx-ingress-con
 kubectl apply -f https://raw.githubusercontent.com/techiescamp/nginx-ingress-controller/refs/heads/main/manifests/deployment.yaml
 ```
 
+## Setup EFS
+
+* https://community.aws/content/2iCiQb70sP9wWcOLgG67jLVqK53/navigating-amazon-eks-eks-with-efs-add-on?lang=en
+* https://github.com/kubernetes-sigs/aws-efs-csi-driver/tree/master/docs#-manifest-public-registry-
+* https://github.com/kubernetes-sigs/aws-efs-csi-driver/blob/master/docs/efs-create-filesystem.md
+
+
 # Dev
 
 ## Generate Self-Signed TLS Cert
@@ -70,6 +77,9 @@ kubectl apply -f 02-03-ingress.yaml
 * https://hub.docker.com/r/tongueroo/sinatra
 * https://github.com/tongueroo/demo-sinatra/blob/main/sinatra_app.rb
 * https://github.com/tongueroo/demo-sinatra/blob/main/views/index.erb
+
+## 
+
 
 
 # Refs
