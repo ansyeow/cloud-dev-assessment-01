@@ -48,6 +48,8 @@ kubectl apply -f https://raw.githubusercontent.com/techiescamp/nginx-ingress-con
 * https://community.aws/content/2iCiQb70sP9wWcOLgG67jLVqK53/navigating-amazon-eks-eks-with-efs-add-on?lang=en
 * https://github.com/kubernetes-sigs/aws-efs-csi-driver/tree/master/docs#-manifest-public-registry-
 * https://github.com/kubernetes-sigs/aws-efs-csi-driver/blob/master/docs/efs-create-filesystem.md
+* https://github.com/kubernetes-sigs/aws-efs-csi-driver/blob/master/docs/iam-policy-create.md
+* https://github.com/kubernetes-sigs/aws-efs-csi-driver/blob/master/examples/kubernetes/static_provisioning/README.md
 
 
 # Dev
@@ -78,12 +80,6 @@ kubectl apply -f 02-03-ingress.yaml
 * https://github.com/tongueroo/demo-sinatra/blob/main/sinatra_app.rb
 * https://github.com/tongueroo/demo-sinatra/blob/main/views/index.erb
 
-## EFS CSI
-
-* https://github.com/kubernetes-sigs/aws-efs-csi-driver/blob/master/docs/efs-create-filesystem.md
-* https://github.com/kubernetes-sigs/aws-efs-csi-driver/blob/master/docs/iam-policy-create.md
-* https://github.com/kubernetes-sigs/aws-efs-csi-driver/tree/master/docs#-manifest-public-registry-
-* https://github.com/kubernetes-sigs/aws-efs-csi-driver/blob/master/examples/kubernetes/static_provisioning/README.md
 
 # Refs
 
