@@ -28,6 +28,8 @@ spec:
           subPath: sinatra_app.rb
         - name: sinatra-app-views-files-volume
           mountPath: /app/views
+        - name: persistent-storage
+          mountPath: /data
       volumes:
       - name: sinatra-app-files-volume
         configMap:
@@ -38,6 +40,9 @@ spec:
       - name: sinatra-app-views-files-volume
         configMap:
           name: sinatra-app-views-files
+      - name: persistent-storage
+        persistentVolumeClaim:
+          claimName: efs-claim
 
 ---
 
