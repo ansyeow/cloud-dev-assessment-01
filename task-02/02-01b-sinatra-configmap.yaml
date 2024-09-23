@@ -20,16 +20,32 @@ data:
     require "sinatra/base"
     require "socket"
 
+    COUNT_FILE_PATH = "/data/disk_backed_count.txt"
+
     class SinatraApp < Sinatra::Base
       get "/" do
-        query_params = request.query_string
-        formatted_params = query_params.empty? ? "" : "?" + query_params
-        client_ip = request.ip
-        request_host = request.host
-        server_hostname = Socket.gethostname
-        puts "#{Time.now} - #{client_ip} - #{request_host} - #{server_hostname} -GET /#{formatted_params}"
+        disk_backed_count = read_disk_backed_count(COUNT_FILE_PATH)
 
-        erb :index
+        erb :index, :locals => {:disk_backed_count => disk_backed_count}
+      end
+
+      get "/count_inc" do
+        disk_backed_count = read_disk_backed_count(COUNT_FILE_PATH)
+
+        disk_backed_count += 1
+        File.write(COUNT_FILE_PATH, disk_backed_count.to_s)
+
+        result = { disk_backed_count: disk_backed_count }
+        result.to_json
+      end
+
+      def read_disk_backed_count(count_file_path)
+        if !File.exist?(count_file_path)
+          File.write(count_file_path, "0")
+        end
+        disk_backed_count_str = File.read(count_file_path)
+
+        disk_backed_count_str.to_i
       end
     end
 
@@ -53,6 +69,9 @@ data:
       <pre>
         ENV['BACKEND_01_USERNAME']: <%= ENV['BACKEND_01_USERNAME'] %>
         ENV['BACKEND_01_PASSWORD']: <%= ENV['BACKEND_01_PASSWORD'] %>
+
+        disk_backed_count: <%= disk_backed_count %>
+        count_inc: <a href="count_inc">/count_inc<a>
 
         request.ip: <%= request.ip %>
         request.host: <%= request.host %>
