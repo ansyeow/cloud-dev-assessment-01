@@ -1,0 +1,43 @@
+NAME                                DATA   AGE
+configmap/kube-root-ca.crt          1      2d9h
+configmap/sinatra-app-files         1      2d
+configmap/sinatra-app-views-files   1      2d
+NAME                        ENDPOINTS                                 AGE
+endpoints/hello-service     192.168.4.55:8080,192.168.54.170:8080     2d9h
+endpoints/sinatra-service   192.168.21.226:8080,192.168.62.192:8080   2d4h
+NAME                              STATUS   VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+persistentvolumeclaim/efs-claim   Bound    efs-pv   5Gi        RWO            efs-sc         <unset>                 106m
+NAME                               READY   STATUS    RESTARTS   AGE
+pod/hello-app-66664866cc-wqkjg     1/1     Running   0          2d9h
+pod/hello-app-66664866cc-xm5wz     1/1     Running   0          2d9h
+pod/sinatra-app-8678f86cb7-dxwlc   1/1     Running   0          35m
+pod/sinatra-app-8678f86cb7-zph6x   1/1     Running   0          35m
+NAME                     TYPE                DATA   AGE
+secret/backend-cred-01   Opaque              2      46h
+secret/hello-app-tls     kubernetes.io/tls   2      2d9h
+NAME                     SECRETS   AGE
+serviceaccount/default   0         2d9h
+NAME                      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
+service/hello-service     ClusterIP   10.100.206.188   <none>        80/TCP    2d9h
+service/sinatra-service   ClusterIP   10.100.95.68     <none>        80/TCP    2d4h
+NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/hello-app     2/2     2            2           2d9h
+deployment.apps/sinatra-app   2/2     2            2           2d4h
+NAME                                     DESIRED   CURRENT   READY   AGE
+replicaset.apps/hello-app-66664866cc     2         2         2       2d9h
+replicaset.apps/sinatra-app-5667b9fcb6   0         0         0       46h
+replicaset.apps/sinatra-app-58c46d7f4c   0         0         0       46h
+replicaset.apps/sinatra-app-6459856d64   0         0         0       45h
+replicaset.apps/sinatra-app-6647549985   0         0         0       2d2h
+replicaset.apps/sinatra-app-68499d67b5   0         0         0       2d
+replicaset.apps/sinatra-app-684b8bbb69   0         0         0       2d
+replicaset.apps/sinatra-app-69f45479d    0         0         0       2d3h
+replicaset.apps/sinatra-app-6d6b747dbb   0         0         0       2d3h
+replicaset.apps/sinatra-app-75b9d4d556   0         0         0       45h
+replicaset.apps/sinatra-app-75db7fbddf   0         0         0       2d2h
+replicaset.apps/sinatra-app-8678f86cb7   2         2         2       24h
+NAME                                                   ADDRESSTYPE   PORTS   ENDPOINTS                       AGE
+endpointslice.discovery.k8s.io/hello-service-zzs2l     IPv4          8080    192.168.4.55,192.168.54.170     2d9h
+endpointslice.discovery.k8s.io/sinatra-service-hnq5w   IPv4          8080    192.168.21.226,192.168.62.192   2d4h
+NAME                                          CLASS   HOSTS                                                                                ADDRESS        PORTS     AGE
+ingress.networking.k8s.io/hello-app-ingress   nginx   k8s-ingressn-ingressn-97593d84d2-be42322631ec4446.elb.ap-southeast-5.amazonaws.com   43.217.2.109   80, 443   2d9h

@@ -1,0 +1,193 @@
+NAME                                                             DATA   AGE
+configmap/amazon-vpc-cni                                         7      4d21h
+configmap/coredns                                                1      4d21h
+configmap/extension-apiserver-authentication                     6      4d21h
+configmap/kube-apiserver-legacy-service-account-token-tracking   1      4d21h
+configmap/kube-proxy                                             1      4d21h
+configmap/kube-proxy-config                                      1      4d21h
+configmap/kube-root-ca.crt                                       1      4d21h
+NAME                                          ENDPOINTS                                                           AGE
+endpoints/aws-load-balancer-webhook-service   192.168.95.131:9443                                                 3d19h
+endpoints/kube-dns                            192.168.58.121:53,192.168.78.183:53,192.168.58.121:53 + 3 more...   4d21h
+NAME                                                READY   STATUS    RESTARTS   AGE
+pod/aws-load-balancer-controller-79659c44d5-zp255   1/1     Running   0          34h
+pod/aws-node-5xk4d                                  2/2     Running   0          3d17h
+pod/aws-node-bxtg9                                  2/2     Running   0          3d17h
+pod/aws-node-c7tsx                                  2/2     Running   0          4d20h
+pod/aws-node-ml7pg                                  2/2     Running   0          4d20h
+pod/aws-node-qqcg8                                  2/2     Running   0          3d17h
+pod/coredns-7fcf7b47cc-9jwcc                        1/1     Running   0          33h
+pod/coredns-7fcf7b47cc-cg5cx                        1/1     Running   0          33h
+pod/ebs-csi-controller-5b94db5c84-8fgk6             6/6     Running   0          34h
+pod/ebs-csi-controller-5b94db5c84-n8qvr             6/6     Running   0          34h
+pod/ebs-csi-node-47f29                              3/3     Running   0          34h
+pod/ebs-csi-node-ch76n                              3/3     Running   0          34h
+pod/ebs-csi-node-hdttr                              3/3     Running   0          34h
+pod/ebs-csi-node-jbltb                              3/3     Running   0          34h
+pod/ebs-csi-node-ptt2z                              3/3     Running   0          34h
+pod/efs-csi-controller-6c74c74756-9r668             3/3     Running   0          3h3m
+pod/efs-csi-controller-6c74c74756-m4tlm             3/3     Running   0          3h3m
+pod/efs-csi-node-b4f9r                              3/3     Running   0          25h
+pod/efs-csi-node-jgqt4                              3/3     Running   0          25h
+pod/efs-csi-node-plsjn                              3/3     Running   0          25h
+pod/efs-csi-node-r66xk                              0/3     Pending   0          25h
+pod/efs-csi-node-vz4wg                              0/3     Pending   0          25h
+pod/eks-pod-identity-agent-488hs                    1/1     Running   0          33h
+pod/eks-pod-identity-agent-9zscx                    1/1     Running   0          33h
+pod/eks-pod-identity-agent-f5txh                    1/1     Running   0          33h
+pod/eks-pod-identity-agent-g67s4                    1/1     Running   0          33h
+pod/eks-pod-identity-agent-s2mh2                    1/1     Running   0          33h
+pod/kube-proxy-78sdv                                1/1     Running   0          3d17h
+pod/kube-proxy-9qvnc                                1/1     Running   0          3d17h
+pod/kube-proxy-c4bmp                                1/1     Running   0          4d20h
+pod/kube-proxy-j5zkl                                1/1     Running   0          4d20h
+pod/kube-proxy-pbm8l                                1/1     Running   0          3d17h
+NAME                                   TYPE                DATA   AGE
+secret/aws-load-balancer-webhook-tls   kubernetes.io/tls   3      3d15h
+NAME                                                         SECRETS   AGE
+serviceaccount/attachdetach-controller                       0         4d21h
+serviceaccount/aws-cloud-provider                            0         4d21h
+serviceaccount/aws-load-balancer-controller                  0         3d19h
+serviceaccount/aws-node                                      0         4d21h
+serviceaccount/certificate-controller                        0         4d21h
+serviceaccount/clusterrole-aggregation-controller            0         4d21h
+serviceaccount/coredns                                       0         4d21h
+serviceaccount/cronjob-controller                            0         4d21h
+serviceaccount/daemon-set-controller                         0         4d21h
+serviceaccount/default                                       0         4d21h
+serviceaccount/deployment-controller                         0         4d21h
+serviceaccount/disruption-controller                         0         4d21h
+serviceaccount/ebs-csi-controller-sa                         0         34h
+serviceaccount/ebs-csi-node-sa                               0         34h
+serviceaccount/efs-csi-controller-sa                         0         33h
+serviceaccount/efs-csi-node-sa                               0         25h
+serviceaccount/eks-vpc-resource-controller                   0         4d21h
+serviceaccount/endpoint-controller                           0         4d21h
+serviceaccount/endpointslice-controller                      0         4d21h
+serviceaccount/endpointslicemirroring-controller             0         4d21h
+serviceaccount/ephemeral-volume-controller                   0         4d21h
+serviceaccount/expand-controller                             0         4d21h
+serviceaccount/generic-garbage-collector                     0         4d21h
+serviceaccount/horizontal-pod-autoscaler                     0         4d21h
+serviceaccount/job-controller                                0         4d21h
+serviceaccount/kube-proxy                                    0         4d21h
+serviceaccount/legacy-service-account-token-cleaner          0         4d21h
+serviceaccount/namespace-controller                          0         4d21h
+serviceaccount/node-controller                               0         4d21h
+serviceaccount/persistent-volume-binder                      0         4d21h
+serviceaccount/pod-garbage-collector                         0         4d21h
+serviceaccount/pv-protection-controller                      0         4d21h
+serviceaccount/pvc-protection-controller                     0         4d21h
+serviceaccount/replicaset-controller                         0         4d21h
+serviceaccount/replication-controller                        0         4d21h
+serviceaccount/resourcequota-controller                      0         4d21h
+serviceaccount/root-ca-cert-publisher                        0         4d21h
+serviceaccount/service-account-controller                    0         4d21h
+serviceaccount/service-controller                            0         4d21h
+serviceaccount/statefulset-controller                        0         4d21h
+serviceaccount/tagging-controller                            0         4d21h
+serviceaccount/ttl-after-finished-controller                 0         4d21h
+serviceaccount/ttl-controller                                0         4d21h
+serviceaccount/validatingadmissionpolicy-status-controller   0         4d21h
+NAME                                        TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)                  AGE
+service/aws-load-balancer-webhook-service   ClusterIP   10.100.72.19   <none>        443/TCP                  3d19h
+service/kube-dns                            ClusterIP   10.100.0.10    <none>        53/UDP,53/TCP,9153/TCP   4d21h
+NAME                                                       CONTROLLER                              REVISION   AGE
+controllerrevision.apps/aws-node-854c795597                daemonset.apps/aws-node                 1          4d21h
+controllerrevision.apps/ebs-csi-node-6bcfbdd64b            daemonset.apps/ebs-csi-node             1          34h
+controllerrevision.apps/ebs-csi-node-windows-ccc959975     daemonset.apps/ebs-csi-node-windows     1          34h
+controllerrevision.apps/efs-csi-node-6b97566dbf            daemonset.apps/efs-csi-node             1          25h
+controllerrevision.apps/eks-pod-identity-agent-68fd644f6   daemonset.apps/eks-pod-identity-agent   1          33h
+controllerrevision.apps/kube-proxy-5bbfcb6bbd              daemonset.apps/kube-proxy               1          4d21h
+NAME                                    DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR              AGE
+daemonset.apps/aws-node                 5         5         5       5            5           <none>                     4d21h
+daemonset.apps/ebs-csi-node             5         5         5       5            5           kubernetes.io/os=linux     34h
+daemonset.apps/ebs-csi-node-windows     0         0         0       0            0           kubernetes.io/os=windows   34h
+daemonset.apps/efs-csi-node             5         5         3       5            3           kubernetes.io/os=linux     25h
+daemonset.apps/eks-pod-identity-agent   5         5         5       5            5           <none>                     33h
+daemonset.apps/kube-proxy               5         5         5       5            5           <none>                     4d21h
+NAME                                           READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/aws-load-balancer-controller   1/1     1            1           3d19h
+deployment.apps/coredns                        2/2     2            2           4d21h
+deployment.apps/ebs-csi-controller             2/2     2            2           34h
+deployment.apps/efs-csi-controller             2/2     2            2           25h
+NAME                                                      DESIRED   CURRENT   READY   AGE
+replicaset.apps/aws-load-balancer-controller-79659c44d5   1         1         1       3d19h
+replicaset.apps/coredns-7fcf7b47cc                        2         2         2       4d21h
+replicaset.apps/ebs-csi-controller-5b94db5c84             2         2         2       34h
+replicaset.apps/efs-csi-controller-6c74c74756             2         2         2       25h
+NAME                                                                      APPROVED   DENIED   READY   ISSUER                                REQUESTOR                                         AGE
+certificaterequest.cert-manager.io/aws-load-balancer-serving-cert-btr5t   True                True    aws-load-balancer-selfsigned-issuer   system:serviceaccount:cert-manager:cert-manager   3d15h
+NAME                                                         READY   SECRET                          AGE
+certificate.cert-manager.io/aws-load-balancer-serving-cert   True    aws-load-balancer-webhook-tls   3d15h
+NAME                                                         READY   AGE
+issuer.cert-manager.io/aws-load-balancer-selfsigned-issuer   True    3d15h
+NAME                                                                    HOLDER                                                                                AGE
+lease.coordination.k8s.io/apiserver-64muxqbhqswl4kxko725zkieky          apiserver-64muxqbhqswl4kxko725zkieky_46a6bb01-0c95-43a1-a708-ed787950fb93             4d21h
+lease.coordination.k8s.io/apiserver-tztihgfm2sfsfwfkkxavrtcfnu          apiserver-tztihgfm2sfsfwfkkxavrtcfnu_a26c4ea1-aeae-4c85-a75a-513ca0008086             4d21h
+lease.coordination.k8s.io/aws-load-balancer-controller-leader           aws-load-balancer-controller-79659c44d5-zp255_00bce89d-0cf1-4852-bcaf-91383514d719    3d15h
+lease.coordination.k8s.io/cert-manager-cainjector-leader-election       cert-manager-cainjector-868f7f9bcd-bcz5c_b9a400ab-bbdb-48eb-b339-74008b8007d6         3d17h
+lease.coordination.k8s.io/cert-manager-controller                       cert-manager-7dfbf568d5-5kmzm-external-cert-manager-controller                        3d17h
+lease.coordination.k8s.io/cloud-controller-manager                      ip-10-0-118-51.ap-southeast-5.compute.internal_9d99ee49-c6ea-40ab-9ff7-0de22375de88   4d21h
+lease.coordination.k8s.io/cp-vpc-resource-controller                    ip-10-0-118-51.ap-southeast-5.compute.internal_e3533358-3cb9-400b-b332-3eacca6f0892   4d21h
+lease.coordination.k8s.io/ebs-csi-aws-com                               1726953469104-8160-ebs-csi-aws-com                                                    34h
+lease.coordination.k8s.io/efs-csi-aws-com                               1727066293630-3990-efs-csi-aws-com                                                    25h
+lease.coordination.k8s.io/eks-certificates-controller                   ip-10-0-118-51.ap-southeast-5.compute.internal                                        4d21h
+lease.coordination.k8s.io/eks-coredns-autoscaler                        ip-10-0-118-51.ap-southeast-5.compute.internal_c483baee-bc6a-4d4a-9453-876678cff15c   4d21h
+lease.coordination.k8s.io/external-attacher-leader-ebs-csi-aws-com      ebs-csi-controller-5b94db5c84-8fgk6                                                   34h
+lease.coordination.k8s.io/external-resizer-ebs-csi-aws-com              ebs-csi-controller-5b94db5c84-8fgk6                                                   34h
+lease.coordination.k8s.io/external-snapshotter-leader-ebs-csi-aws-com   ebs-csi-controller-5b94db5c84-8fgk6                                                   34h
+lease.coordination.k8s.io/kube-controller-manager                       ip-10-0-118-51.ap-southeast-5.compute.internal_887984c0-ea5d-4e0a-a345-f56f4945792a   4d21h
+lease.coordination.k8s.io/kube-scheduler                                ip-10-0-118-51.ap-southeast-5.compute.internal_597c5ad0-58c6-450c-bff3-3bdcbddf3e41   4d21h
+NAME                                                                     ADDRESSTYPE   PORTS        ENDPOINTS                       AGE
+endpointslice.discovery.k8s.io/aws-load-balancer-webhook-service-dtndz   IPv4          9443         192.168.95.131                  3d19h
+endpointslice.discovery.k8s.io/kube-dns-6zlht                            IPv4          9153,53,53   192.168.58.121,192.168.78.183   4d21h
+NAME                                            MIN AVAILABLE   MAX UNAVAILABLE   ALLOWED DISRUPTIONS   AGE
+poddisruptionbudget.policy/coredns              N/A             1                 1                     4d21h
+poddisruptionbudget.policy/ebs-csi-controller   N/A             1                 1                     34h
+NAME                                                                                                 ROLE                                                             AGE
+rolebinding.rbac.authorization.k8s.io/aws-load-balancer-controller-leader-election-rolebinding       Role/aws-load-balancer-controller-leader-election-role           3d19h
+rolebinding.rbac.authorization.k8s.io/cert-manager-cainjector:leaderelection                         Role/cert-manager-cainjector:leaderelection                      3d19h
+rolebinding.rbac.authorization.k8s.io/cert-manager:leaderelection                                    Role/cert-manager:leaderelection                                 3d19h
+rolebinding.rbac.authorization.k8s.io/ebs-csi-leases-rolebinding                                     Role/ebs-csi-leases-role                                         34h
+rolebinding.rbac.authorization.k8s.io/efs-csi-provisioner-binding-describe-secrets                   ClusterRole/efs-csi-external-provisioner-role-describe-secrets   25h
+rolebinding.rbac.authorization.k8s.io/eks-vpc-resource-controller-rolebinding                        Role/eks-vpc-resource-controller-role                            4d21h
+rolebinding.rbac.authorization.k8s.io/eks:addon-manager                                              Role/eks:addon-manager                                           4d21h
+rolebinding.rbac.authorization.k8s.io/eks:authenticator                                              Role/eks:authenticator                                           4d21h
+rolebinding.rbac.authorization.k8s.io/eks:az-poller                                                  Role/eks:az-poller                                               4d21h
+rolebinding.rbac.authorization.k8s.io/eks:certificate-controller                                     Role/eks:certificate-controller                                  4d21h
+rolebinding.rbac.authorization.k8s.io/eks:cloud-controller-manager:apiserver-authentication-reader   Role/extension-apiserver-authentication-reader                   4d21h
+rolebinding.rbac.authorization.k8s.io/eks:coredns-autoscaler                                         Role/eks:coredns-autoscaler                                      4d21h
+rolebinding.rbac.authorization.k8s.io/eks:fargate-manager                                            Role/eks:fargate-manager                                         4d21h
+rolebinding.rbac.authorization.k8s.io/eks:k8s-metrics                                                Role/eks:k8s-metrics                                             4d21h
+rolebinding.rbac.authorization.k8s.io/eks:network-policy-controller                                  Role/eks:network-policy-controller                               4d21h
+rolebinding.rbac.authorization.k8s.io/eks:node-manager                                               Role/eks:node-manager                                            4d21h
+rolebinding.rbac.authorization.k8s.io/eks:service-operations                                         Role/eks:service-operations-configmaps                           4d21h
+rolebinding.rbac.authorization.k8s.io/system::extension-apiserver-authentication-reader              Role/extension-apiserver-authentication-reader                   4d21h
+rolebinding.rbac.authorization.k8s.io/system::leader-locking-kube-controller-manager                 Role/system::leader-locking-kube-controller-manager              4d21h
+rolebinding.rbac.authorization.k8s.io/system::leader-locking-kube-scheduler                          Role/system::leader-locking-kube-scheduler                       4d21h
+rolebinding.rbac.authorization.k8s.io/system:controller:bootstrap-signer                             Role/system:controller:bootstrap-signer                          4d21h
+rolebinding.rbac.authorization.k8s.io/system:controller:cloud-provider                               Role/system:controller:cloud-provider                            4d21h
+rolebinding.rbac.authorization.k8s.io/system:controller:token-cleaner                                Role/system:controller:token-cleaner                             4d21h
+NAME                                                                               CREATED AT
+role.rbac.authorization.k8s.io/aws-load-balancer-controller-leader-election-role   2024-09-19T12:13:37Z
+role.rbac.authorization.k8s.io/cert-manager-cainjector:leaderelection              2024-09-19T12:03:05Z
+role.rbac.authorization.k8s.io/cert-manager:leaderelection                         2024-09-19T12:03:05Z
+role.rbac.authorization.k8s.io/ebs-csi-leases-role                                 2024-09-21T21:17:44Z
+role.rbac.authorization.k8s.io/eks-vpc-resource-controller-role                    2024-09-18T10:26:22Z
+role.rbac.authorization.k8s.io/eks:addon-manager                                   2024-09-18T10:26:21Z
+role.rbac.authorization.k8s.io/eks:authenticator                                   2024-09-18T10:26:18Z
+role.rbac.authorization.k8s.io/eks:az-poller                                       2024-09-18T10:26:18Z
+role.rbac.authorization.k8s.io/eks:certificate-controller                          2024-09-18T10:26:18Z
+role.rbac.authorization.k8s.io/eks:coredns-autoscaler                              2024-09-18T10:26:18Z
+role.rbac.authorization.k8s.io/eks:fargate-manager                                 2024-09-18T10:26:21Z
+role.rbac.authorization.k8s.io/eks:k8s-metrics                                     2024-09-18T10:26:18Z
+role.rbac.authorization.k8s.io/eks:network-policy-controller                       2024-09-18T10:26:23Z
+role.rbac.authorization.k8s.io/eks:node-manager                                    2024-09-18T10:26:21Z
+role.rbac.authorization.k8s.io/eks:service-operations-configmaps                   2024-09-18T10:26:18Z
+role.rbac.authorization.k8s.io/extension-apiserver-authentication-reader           2024-09-18T10:26:16Z
+role.rbac.authorization.k8s.io/system::leader-locking-kube-controller-manager      2024-09-18T10:26:16Z
+role.rbac.authorization.k8s.io/system::leader-locking-kube-scheduler               2024-09-18T10:26:16Z
+role.rbac.authorization.k8s.io/system:controller:bootstrap-signer                  2024-09-18T10:26:16Z
+role.rbac.authorization.k8s.io/system:controller:cloud-provider                    2024-09-18T10:26:16Z
+role.rbac.authorization.k8s.io/system:controller:token-cleaner                     2024-09-18T10:26:16Z

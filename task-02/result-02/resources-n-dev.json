@@ -1,0 +1,2868 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "data": {
+                "ca.crt": "-----BEGIN CERTIFICATE-----\nMIIDBTCCAe2gAwIBAgIIa88r4wrRHsAwDQYJKoZIhvcNAQELBQAwFTETMBEGA1UE\nAxMKa3ViZXJuZXRlczAeFw0yNDA5MTgxMDIwNDBaFw0zNDA5MTYxMDI1NDBaMBUx\nEzARBgNVBAMTCmt1YmVybmV0ZXMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK\nAoIBAQDF/nmQkzjy5WpRDW1kyUG2uknvONT1u4GvRBvOmi1sDlqEa+IFQ3wohMON\njUxa/O1GjGazOhqZWFGBk6dBII9Ga/uJzuiWfF9wTKMmrG+LzVsp8yktiyUJ1sXM\nKX8V7lExJaewElfG8/G81n19+eME/v6YPbjlk5mbjYJRGX6Df9wXvPCqzVehhBhm\nQBRXpwgo9MZAIYzEBNFtRM/UMMpX8Qt2sGljCw22SxN3YtTCgk/+SNYwiTg5xDaT\nBfGW6HZ9Xu44fnc7Y7LkEYDOmmYf6IQkm8w5yByKeGoG5NhwZBw1oI09/zagZamf\nn3XgIK1aqSp8lLCl9yVMlNEvxAmTAgMBAAGjWTBXMA4GA1UdDwEB/wQEAwICpDAP\nBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSXQldvcG0LzsJPwVCWprHYKKiBUTAV\nBgNVHREEDjAMggprdWJlcm5ldGVzMA0GCSqGSIb3DQEBCwUAA4IBAQDEb1Bah8TH\n7D385OlPAdXzb77ZXu9OOmNuxRGF3WFA87DYWH4SVEbt2asxawFk0EqUTGgeuYqr\n7BbWK8WQdDPHu4ZLoHe76j3Ynn28ktRKUhhbwtXIAK/DDbrE2g+290P3Kroyq7re\nxu6gZ93Heyfz6cFVzzwsbQk51k1grMaoJ4tkDKfIn4xCUWQ12YOXoI8iuM1vIkY3\nP+U0RirSnubmlfbnKOpd/S1RfB7y+XqGgOiVOYHS6a6w8cn+v2PDVvL+WARDpGlM\nixbmqqBmbVSjjWt1bPAQi6enk4R9hchASB1RsrGHgFnbp03b9UQK5c9fWolVlXjo\ncklsPxYc6W10\n-----END CERTIFICATE-----\n"
+            },
+            "kind": "ConfigMap",
+            "metadata": {
+                "annotations": {
+                    "kubernetes.io/description": "Contains a CA bundle that can be used to verify the kube-apiserver when using internal endpoints such as the internal service IP or kubernetes.default.svc. No other usage is guaranteed across distributions of Kubernetes clusters."
+                },
+                "creationTimestamp": "2024-09-20T21:43:47Z",
+                "name": "kube-root-ca.crt",
+                "namespace": "dev",
+                "resourceVersion": "686614",
+                "uid": "5801a126-98f5-4a1f-8426-32c705a92dad"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "data": {
+                "sinatra_app.rb": "require \"sinatra/base\"\nrequire \"socket\"\n\nCOUNT_FILE_PATH = \"/data/disk_backed_count.txt\"\n\nclass SinatraApp \u003c Sinatra::Base\n  get \"/\" do\n    disk_backed_count = read_disk_backed_count(COUNT_FILE_PATH)\n\n    erb :index, :locals =\u003e {:disk_backed_count =\u003e disk_backed_count}\n  end\n\n  get \"/count_inc\" do\n    disk_backed_count = read_disk_backed_count(COUNT_FILE_PATH)\n\n    disk_backed_count += 1\n    File.write(COUNT_FILE_PATH, disk_backed_count.to_s)\n\n    result = { disk_backed_count: disk_backed_count }\n    result.to_json\n  end\n\n  def read_disk_backed_count(count_file_path)\n    if !File.exist?(count_file_path)\n      File.write(count_file_path, \"0\")\n    end\n    disk_backed_count_str = File.read(count_file_path)\n\n    disk_backed_count_str.to_i\n  end\nend\n"
+            },
+            "kind": "ConfigMap",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"data\":{\"sinatra_app.rb\":\"require \\\"sinatra/base\\\"\\nrequire \\\"socket\\\"\\n\\nCOUNT_FILE_PATH = \\\"/data/disk_backed_count.txt\\\"\\n\\nclass SinatraApp \\u003c Sinatra::Base\\n  get \\\"/\\\" do\\n    disk_backed_count = read_disk_backed_count(COUNT_FILE_PATH)\\n\\n    erb :index, :locals =\\u003e {:disk_backed_count =\\u003e disk_backed_count}\\n  end\\n\\n  get \\\"/count_inc\\\" do\\n    disk_backed_count = read_disk_backed_count(COUNT_FILE_PATH)\\n\\n    disk_backed_count += 1\\n    File.write(COUNT_FILE_PATH, disk_backed_count.to_s)\\n\\n    result = { disk_backed_count: disk_backed_count }\\n    result.to_json\\n  end\\n\\n  def read_disk_backed_count(count_file_path)\\n    if !File.exist?(count_file_path)\\n      File.write(count_file_path, \\\"0\\\")\\n    end\\n    disk_backed_count_str = File.read(count_file_path)\\n\\n    disk_backed_count_str.to_i\\n  end\\nend\\n\"},\"kind\":\"ConfigMap\",\"metadata\":{\"annotations\":{},\"name\":\"sinatra-app-files\",\"namespace\":\"dev\"}}\n"
+                },
+                "creationTimestamp": "2024-09-21T07:12:37Z",
+                "name": "sinatra-app-files",
+                "namespace": "dev",
+                "resourceVersion": "1585207",
+                "uid": "b62ef0a7-b8a9-474c-b22d-aba1d92cae68"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "data": {
+                "index.erb": "\u003c!DOCTYPE html\u003e\n\u003chtml lang=\"en\"\u003e\n\u003chead\u003e\n  \u003cmeta charset=\"UTF-8\"\u003e\n  \u003ctitle\u003eCloud Developer Assessment 02\u003c/title\u003e\n  \u003clink rel=\"stylesheet\" href=\"/styles.css\"\u003e\n\u003c/head\u003e\n\u003cbody\u003e\n  \u003cpre\u003e\n    ENV['BACKEND_01_USERNAME']: \u003c%= ENV['BACKEND_01_USERNAME'] %\u003e\n    ENV['BACKEND_01_PASSWORD']: \u003c%= ENV['BACKEND_01_PASSWORD'] %\u003e\n\n    disk_backed_count: \u003c%= disk_backed_count %\u003e\n    count_inc: \u003ca href=\"count_inc\"\u003e/count_inc\u003ca\u003e\n\n    request.ip: \u003c%= request.ip %\u003e\n    request.host: \u003c%= request.host %\u003e\n    Socket.gethostname: \u003c%= Socket.gethostname %\u003e\n  \u003c/pre\u003e\n\u003c/body\u003e\n\u003c/html\u003e\n"
+            },
+            "kind": "ConfigMap",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"data\":{\"index.erb\":\"\\u003c!DOCTYPE html\\u003e\\n\\u003chtml lang=\\\"en\\\"\\u003e\\n\\u003chead\\u003e\\n  \\u003cmeta charset=\\\"UTF-8\\\"\\u003e\\n  \\u003ctitle\\u003eCloud Developer Assessment 02\\u003c/title\\u003e\\n  \\u003clink rel=\\\"stylesheet\\\" href=\\\"/styles.css\\\"\\u003e\\n\\u003c/head\\u003e\\n\\u003cbody\\u003e\\n  \\u003cpre\\u003e\\n    ENV['BACKEND_01_USERNAME']: \\u003c%= ENV['BACKEND_01_USERNAME'] %\\u003e\\n    ENV['BACKEND_01_PASSWORD']: \\u003c%= ENV['BACKEND_01_PASSWORD'] %\\u003e\\n\\n    disk_backed_count: \\u003c%= disk_backed_count %\\u003e\\n    count_inc: \\u003ca href=\\\"count_inc\\\"\\u003e/count_inc\\u003ca\\u003e\\n\\n    request.ip: \\u003c%= request.ip %\\u003e\\n    request.host: \\u003c%= request.host %\\u003e\\n    Socket.gethostname: \\u003c%= Socket.gethostname %\\u003e\\n  \\u003c/pre\\u003e\\n\\u003c/body\\u003e\\n\\u003c/html\\u003e\\n\"},\"kind\":\"ConfigMap\",\"metadata\":{\"annotations\":{},\"name\":\"sinatra-app-views-files\",\"namespace\":\"dev\"}}\n"
+                },
+                "creationTimestamp": "2024-09-21T07:12:37Z",
+                "name": "sinatra-app-views-files",
+                "namespace": "dev",
+                "resourceVersion": "1573483",
+                "uid": "db8198d5-e674-4944-82e1-82fb55df253b"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "Endpoints",
+            "metadata": {
+                "annotations": {
+                    "endpoints.kubernetes.io/last-change-trigger-time": "2024-09-20T21:49:43Z"
+                },
+                "creationTimestamp": "2024-09-20T21:49:35Z",
+                "labels": {
+                    "app": "hello"
+                },
+                "name": "hello-service",
+                "namespace": "dev",
+                "resourceVersion": "687992",
+                "uid": "b9fb3ec9-9ffa-4f0e-a350-e1b52a6da318"
+            },
+            "subsets": [
+                {
+                    "addresses": [
+                        {
+                            "ip": "192.168.4.55",
+                            "nodeName": "ip-192-168-1-153.ap-southeast-5.compute.internal",
+                            "targetRef": {
+                                "kind": "Pod",
+                                "name": "hello-app-66664866cc-wqkjg",
+                                "namespace": "dev",
+                                "uid": "54f9c49e-eb4f-40ae-afab-127b8766ad2b"
+                            }
+                        },
+                        {
+                            "ip": "192.168.54.170",
+                            "nodeName": "ip-192-168-55-12.ap-southeast-5.compute.internal",
+                            "targetRef": {
+                                "kind": "Pod",
+                                "name": "hello-app-66664866cc-xm5wz",
+                                "namespace": "dev",
+                                "uid": "427a8ad8-8b8b-4ca9-9d82-0a7e481d201d"
+                            }
+                        }
+                    ],
+                    "ports": [
+                        {
+                            "port": 8080,
+                            "protocol": "TCP"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Endpoints",
+            "metadata": {
+                "annotations": {
+                    "endpoints.kubernetes.io/last-change-trigger-time": "2024-09-23T07:07:50Z"
+                },
+                "creationTimestamp": "2024-09-21T03:39:46Z",
+                "labels": {
+                    "app": "sinatra"
+                },
+                "name": "sinatra-service",
+                "namespace": "dev",
+                "resourceVersion": "1585339",
+                "uid": "2401335e-26a7-4b05-83d9-2d06c2f522ad"
+            },
+            "subsets": [
+                {
+                    "addresses": [
+                        {
+                            "ip": "192.168.21.226",
+                            "nodeName": "ip-192-168-1-153.ap-southeast-5.compute.internal",
+                            "targetRef": {
+                                "kind": "Pod",
+                                "name": "sinatra-app-8678f86cb7-dxwlc",
+                                "namespace": "dev",
+                                "uid": "42812b9d-fced-482d-b458-cd0f215cb627"
+                            }
+                        },
+                        {
+                            "ip": "192.168.62.192",
+                            "nodeName": "ip-192-168-55-12.ap-southeast-5.compute.internal",
+                            "targetRef": {
+                                "kind": "Pod",
+                                "name": "sinatra-app-8678f86cb7-zph6x",
+                                "namespace": "dev",
+                                "uid": "ee4f421f-0f39-44c2-8ebb-2615df760cc3"
+                            }
+                        }
+                    ],
+                    "ports": [
+                        {
+                            "port": 8080,
+                            "protocol": "TCP"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "PersistentVolumeClaim",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"PersistentVolumeClaim\",\"metadata\":{\"annotations\":{},\"name\":\"efs-claim\",\"namespace\":\"dev\"},\"spec\":{\"accessModes\":[\"ReadWriteOnce\"],\"resources\":{\"requests\":{\"storage\":\"5Gi\"}},\"storageClassName\":\"efs-sc\"}}\n",
+                    "pv.kubernetes.io/bind-completed": "yes",
+                    "pv.kubernetes.io/bound-by-controller": "yes"
+                },
+                "creationTimestamp": "2024-09-23T05:56:38Z",
+                "finalizers": [
+                    "kubernetes.io/pvc-protection"
+                ],
+                "name": "efs-claim",
+                "namespace": "dev",
+                "resourceVersion": "1564445",
+                "uid": "079433f5-9f56-42cb-92d1-ac3358220664"
+            },
+            "spec": {
+                "accessModes": [
+                    "ReadWriteOnce"
+                ],
+                "resources": {
+                    "requests": {
+                        "storage": "5Gi"
+                    }
+                },
+                "storageClassName": "efs-sc",
+                "volumeMode": "Filesystem",
+                "volumeName": "efs-pv"
+            },
+            "status": {
+                "accessModes": [
+                    "ReadWriteOnce"
+                ],
+                "capacity": {
+                    "storage": "5Gi"
+                },
+                "phase": "Bound"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "creationTimestamp": "2024-09-20T21:49:35Z",
+                "generateName": "hello-app-66664866cc-",
+                "labels": {
+                    "app": "hello",
+                    "pod-template-hash": "66664866cc"
+                },
+                "name": "hello-app-66664866cc-wqkjg",
+                "namespace": "dev",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "ReplicaSet",
+                        "name": "hello-app-66664866cc",
+                        "uid": "f5e22bf4-9e7c-484b-91ce-28ccd42036ea"
+                    }
+                ],
+                "resourceVersion": "687984",
+                "uid": "54f9c49e-eb4f-40ae-afab-127b8766ad2b"
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "image": "gcr.io/google-samples/hello-app:2.0",
+                        "imagePullPolicy": "IfNotPresent",
+                        "name": "hello",
+                        "resources": {},
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "kube-api-access-77lp7",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "enableServiceLinks": true,
+                "nodeName": "ip-192-168-1-153.ap-southeast-5.compute.internal",
+                "preemptionPolicy": "PreemptLowerPriority",
+                "priority": 0,
+                "restartPolicy": "Always",
+                "schedulerName": "default-scheduler",
+                "securityContext": {},
+                "serviceAccount": "default",
+                "serviceAccountName": "default",
+                "terminationGracePeriodSeconds": 30,
+                "tolerations": [
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/not-ready",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    },
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/unreachable",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    }
+                ],
+                "volumes": [
+                    {
+                        "name": "kube-api-access-77lp7",
+                        "projected": {
+                            "defaultMode": 420,
+                            "sources": [
+                                {
+                                    "serviceAccountToken": {
+                                        "expirationSeconds": 3607,
+                                        "path": "token"
+                                    }
+                                },
+                                {
+                                    "configMap": {
+                                        "items": [
+                                            {
+                                                "key": "ca.crt",
+                                                "path": "ca.crt"
+                                            }
+                                        ],
+                                        "name": "kube-root-ca.crt"
+                                    }
+                                },
+                                {
+                                    "downwardAPI": {
+                                        "items": [
+                                            {
+                                                "fieldRef": {
+                                                    "apiVersion": "v1",
+                                                    "fieldPath": "metadata.namespace"
+                                                },
+                                                "path": "namespace"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-09-20T21:49:43Z",
+                        "status": "True",
+                        "type": "PodReadyToStartContainers"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-09-20T21:49:35Z",
+                        "status": "True",
+                        "type": "Initialized"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-09-20T21:49:43Z",
+                        "status": "True",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-09-20T21:49:43Z",
+                        "status": "True",
+                        "type": "ContainersReady"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-09-20T21:49:35Z",
+                        "status": "True",
+                        "type": "PodScheduled"
+                    }
+                ],
+                "containerStatuses": [
+                    {
+                        "containerID": "containerd://26be104ff8a42c1d745010135c05877ff9b402078cd2ded58387c57f95f7893c",
+                        "image": "gcr.io/google-samples/hello-app:2.0",
+                        "imageID": "gcr.io/google-samples/hello-app@sha256:bdf36508b89fc6d272880b5764eb5e2ce6d9408e020156a601c35b9c1164f7b9",
+                        "lastState": {},
+                        "name": "hello",
+                        "ready": true,
+                        "restartCount": 0,
+                        "started": true,
+                        "state": {
+                            "running": {
+                                "startedAt": "2024-09-20T21:49:42Z"
+                            }
+                        }
+                    }
+                ],
+                "hostIP": "192.168.1.153",
+                "hostIPs": [
+                    {
+                        "ip": "192.168.1.153"
+                    }
+                ],
+                "phase": "Running",
+                "podIP": "192.168.4.55",
+                "podIPs": [
+                    {
+                        "ip": "192.168.4.55"
+                    }
+                ],
+                "qosClass": "BestEffort",
+                "startTime": "2024-09-20T21:49:35Z"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "creationTimestamp": "2024-09-20T21:49:35Z",
+                "generateName": "hello-app-66664866cc-",
+                "labels": {
+                    "app": "hello",
+                    "pod-template-hash": "66664866cc"
+                },
+                "name": "hello-app-66664866cc-xm5wz",
+                "namespace": "dev",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "ReplicaSet",
+                        "name": "hello-app-66664866cc",
+                        "uid": "f5e22bf4-9e7c-484b-91ce-28ccd42036ea"
+                    }
+                ],
+                "resourceVersion": "687990",
+                "uid": "427a8ad8-8b8b-4ca9-9d82-0a7e481d201d"
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "image": "gcr.io/google-samples/hello-app:2.0",
+                        "imagePullPolicy": "IfNotPresent",
+                        "name": "hello",
+                        "resources": {},
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "kube-api-access-pbvzm",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "enableServiceLinks": true,
+                "nodeName": "ip-192-168-55-12.ap-southeast-5.compute.internal",
+                "preemptionPolicy": "PreemptLowerPriority",
+                "priority": 0,
+                "restartPolicy": "Always",
+                "schedulerName": "default-scheduler",
+                "securityContext": {},
+                "serviceAccount": "default",
+                "serviceAccountName": "default",
+                "terminationGracePeriodSeconds": 30,
+                "tolerations": [
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/not-ready",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    },
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/unreachable",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    }
+                ],
+                "volumes": [
+                    {
+                        "name": "kube-api-access-pbvzm",
+                        "projected": {
+                            "defaultMode": 420,
+                            "sources": [
+                                {
+                                    "serviceAccountToken": {
+                                        "expirationSeconds": 3607,
+                                        "path": "token"
+                                    }
+                                },
+                                {
+                                    "configMap": {
+                                        "items": [
+                                            {
+                                                "key": "ca.crt",
+                                                "path": "ca.crt"
+                                            }
+                                        ],
+                                        "name": "kube-root-ca.crt"
+                                    }
+                                },
+                                {
+                                    "downwardAPI": {
+                                        "items": [
+                                            {
+                                                "fieldRef": {
+                                                    "apiVersion": "v1",
+                                                    "fieldPath": "metadata.namespace"
+                                                },
+                                                "path": "namespace"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-09-20T21:49:43Z",
+                        "status": "True",
+                        "type": "PodReadyToStartContainers"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-09-20T21:49:35Z",
+                        "status": "True",
+                        "type": "Initialized"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-09-20T21:49:43Z",
+                        "status": "True",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-09-20T21:49:43Z",
+                        "status": "True",
+                        "type": "ContainersReady"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-09-20T21:49:35Z",
+                        "status": "True",
+                        "type": "PodScheduled"
+                    }
+                ],
+                "containerStatuses": [
+                    {
+                        "containerID": "containerd://b027ceb9770def2b564e5a1db1e4bb5ec11960a00cd14c5e0197ae8e8dee96a2",
+                        "image": "gcr.io/google-samples/hello-app:2.0",
+                        "imageID": "gcr.io/google-samples/hello-app@sha256:bdf36508b89fc6d272880b5764eb5e2ce6d9408e020156a601c35b9c1164f7b9",
+                        "lastState": {},
+                        "name": "hello",
+                        "ready": true,
+                        "restartCount": 0,
+                        "started": true,
+                        "state": {
+                            "running": {
+                                "startedAt": "2024-09-20T21:49:42Z"
+                            }
+                        }
+                    }
+                ],
+                "hostIP": "192.168.55.12",
+                "hostIPs": [
+                    {
+                        "ip": "192.168.55.12"
+                    }
+                ],
+                "phase": "Running",
+                "podIP": "192.168.54.170",
+                "podIPs": [
+                    {
+                        "ip": "192.168.54.170"
+                    }
+                ],
+                "qosClass": "BestEffort",
+                "startTime": "2024-09-20T21:49:35Z"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "creationTimestamp": "2024-09-23T07:07:48Z",
+                "generateName": "sinatra-app-8678f86cb7-",
+                "labels": {
+                    "app": "sinatra",
+                    "pod-template-hash": "8678f86cb7"
+                },
+                "name": "sinatra-app-8678f86cb7-dxwlc",
+                "namespace": "dev",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "ReplicaSet",
+                        "name": "sinatra-app-8678f86cb7",
+                        "uid": "1255c82d-da3c-4b50-bad5-91ba76c90fcc"
+                    }
+                ],
+                "resourceVersion": "1585332",
+                "uid": "42812b9d-fced-482d-b458-cd0f215cb627"
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "envFrom": [
+                            {
+                                "prefix": "BACKEND_01_",
+                                "secretRef": {
+                                    "name": "backend-cred-01"
+                                }
+                            }
+                        ],
+                        "image": "tongueroo/sinatra",
+                        "imagePullPolicy": "IfNotPresent",
+                        "name": "sinatra",
+                        "ports": [
+                            {
+                                "containerPort": 8080,
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "resources": {},
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/app/sinatra_app.rb",
+                                "name": "sinatra-app-files-volume",
+                                "subPath": "sinatra_app.rb"
+                            },
+                            {
+                                "mountPath": "/app/views",
+                                "name": "sinatra-app-views-files-volume"
+                            },
+                            {
+                                "mountPath": "/data",
+                                "name": "persistent-storage"
+                            },
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "kube-api-access-88vk4",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "enableServiceLinks": true,
+                "nodeName": "ip-192-168-1-153.ap-southeast-5.compute.internal",
+                "preemptionPolicy": "PreemptLowerPriority",
+                "priority": 0,
+                "restartPolicy": "Always",
+                "schedulerName": "default-scheduler",
+                "securityContext": {},
+                "serviceAccount": "default",
+                "serviceAccountName": "default",
+                "terminationGracePeriodSeconds": 30,
+                "tolerations": [
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/not-ready",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    },
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/unreachable",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    }
+                ],
+                "volumes": [
+                    {
+                        "configMap": {
+                            "defaultMode": 420,
+                            "items": [
+                                {
+                                    "key": "sinatra_app.rb",
+                                    "path": "sinatra_app.rb"
+                                }
+                            ],
+                            "name": "sinatra-app-files"
+                        },
+                        "name": "sinatra-app-files-volume"
+                    },
+                    {
+                        "configMap": {
+                            "defaultMode": 420,
+                            "name": "sinatra-app-views-files"
+                        },
+                        "name": "sinatra-app-views-files-volume"
+                    },
+                    {
+                        "name": "persistent-storage",
+                        "persistentVolumeClaim": {
+                            "claimName": "efs-claim"
+                        }
+                    },
+                    {
+                        "name": "kube-api-access-88vk4",
+                        "projected": {
+                            "defaultMode": 420,
+                            "sources": [
+                                {
+                                    "serviceAccountToken": {
+                                        "expirationSeconds": 3607,
+                                        "path": "token"
+                                    }
+                                },
+                                {
+                                    "configMap": {
+                                        "items": [
+                                            {
+                                                "key": "ca.crt",
+                                                "path": "ca.crt"
+                                            }
+                                        ],
+                                        "name": "kube-root-ca.crt"
+                                    }
+                                },
+                                {
+                                    "downwardAPI": {
+                                        "items": [
+                                            {
+                                                "fieldRef": {
+                                                    "apiVersion": "v1",
+                                                    "fieldPath": "metadata.namespace"
+                                                },
+                                                "path": "namespace"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-09-23T07:07:50Z",
+                        "status": "True",
+                        "type": "PodReadyToStartContainers"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-09-23T07:07:48Z",
+                        "status": "True",
+                        "type": "Initialized"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-09-23T07:07:50Z",
+                        "status": "True",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-09-23T07:07:50Z",
+                        "status": "True",
+                        "type": "ContainersReady"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-09-23T07:07:48Z",
+                        "status": "True",
+                        "type": "PodScheduled"
+                    }
+                ],
+                "containerStatuses": [
+                    {
+                        "containerID": "containerd://1ffdb7d37951c65ac33c31af4fb39d8f0d1b987d77f4d071f1f3ce81c9e0e48d",
+                        "image": "docker.io/tongueroo/sinatra:latest",
+                        "imageID": "docker.io/tongueroo/sinatra@sha256:1dd9bc2c9188683f81fac6e86718fc88ca95dd87c88082c1d4c2aedbaf97e966",
+                        "lastState": {},
+                        "name": "sinatra",
+                        "ready": true,
+                        "restartCount": 0,
+                        "started": true,
+                        "state": {
+                            "running": {
+                                "startedAt": "2024-09-23T07:07:49Z"
+                            }
+                        }
+                    }
+                ],
+                "hostIP": "192.168.1.153",
+                "hostIPs": [
+                    {
+                        "ip": "192.168.1.153"
+                    }
+                ],
+                "phase": "Running",
+                "podIP": "192.168.21.226",
+                "podIPs": [
+                    {
+                        "ip": "192.168.21.226"
+                    }
+                ],
+                "qosClass": "BestEffort",
+                "startTime": "2024-09-23T07:07:48Z"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "creationTimestamp": "2024-09-23T07:07:48Z",
+                "generateName": "sinatra-app-8678f86cb7-",
+                "labels": {
+                    "app": "sinatra",
+                    "pod-template-hash": "8678f86cb7"
+                },
+                "name": "sinatra-app-8678f86cb7-zph6x",
+                "namespace": "dev",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "ReplicaSet",
+                        "name": "sinatra-app-8678f86cb7",
+                        "uid": "1255c82d-da3c-4b50-bad5-91ba76c90fcc"
+                    }
+                ],
+                "resourceVersion": "1585338",
+                "uid": "ee4f421f-0f39-44c2-8ebb-2615df760cc3"
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "envFrom": [
+                            {
+                                "prefix": "BACKEND_01_",
+                                "secretRef": {
+                                    "name": "backend-cred-01"
+                                }
+                            }
+                        ],
+                        "image": "tongueroo/sinatra",
+                        "imagePullPolicy": "IfNotPresent",
+                        "name": "sinatra",
+                        "ports": [
+                            {
+                                "containerPort": 8080,
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "resources": {},
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/app/sinatra_app.rb",
+                                "name": "sinatra-app-files-volume",
+                                "subPath": "sinatra_app.rb"
+                            },
+                            {
+                                "mountPath": "/app/views",
+                                "name": "sinatra-app-views-files-volume"
+                            },
+                            {
+                                "mountPath": "/data",
+                                "name": "persistent-storage"
+                            },
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "kube-api-access-gqbdn",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "enableServiceLinks": true,
+                "nodeName": "ip-192-168-55-12.ap-southeast-5.compute.internal",
+                "preemptionPolicy": "PreemptLowerPriority",
+                "priority": 0,
+                "restartPolicy": "Always",
+                "schedulerName": "default-scheduler",
+                "securityContext": {},
+                "serviceAccount": "default",
+                "serviceAccountName": "default",
+                "terminationGracePeriodSeconds": 30,
+                "tolerations": [
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/not-ready",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    },
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/unreachable",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    }
+                ],
+                "volumes": [
+                    {
+                        "configMap": {
+                            "defaultMode": 420,
+                            "items": [
+                                {
+                                    "key": "sinatra_app.rb",
+                                    "path": "sinatra_app.rb"
+                                }
+                            ],
+                            "name": "sinatra-app-files"
+                        },
+                        "name": "sinatra-app-files-volume"
+                    },
+                    {
+                        "configMap": {
+                            "defaultMode": 420,
+                            "name": "sinatra-app-views-files"
+                        },
+                        "name": "sinatra-app-views-files-volume"
+                    },
+                    {
+                        "name": "persistent-storage",
+                        "persistentVolumeClaim": {
+                            "claimName": "efs-claim"
+                        }
+                    },
+                    {
+                        "name": "kube-api-access-gqbdn",
+                        "projected": {
+                            "defaultMode": 420,
+                            "sources": [
+                                {
+                                    "serviceAccountToken": {
+                                        "expirationSeconds": 3607,
+                                        "path": "token"
+                                    }
+                                },
+                                {
+                                    "configMap": {
+                                        "items": [
+                                            {
+                                                "key": "ca.crt",
+                                                "path": "ca.crt"
+                                            }
+                                        ],
+                                        "name": "kube-root-ca.crt"
+                                    }
+                                },
+                                {
+                                    "downwardAPI": {
+                                        "items": [
+                                            {
+                                                "fieldRef": {
+                                                    "apiVersion": "v1",
+                                                    "fieldPath": "metadata.namespace"
+                                                },
+                                                "path": "namespace"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-09-23T07:07:50Z",
+                        "status": "True",
+                        "type": "PodReadyToStartContainers"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-09-23T07:07:48Z",
+                        "status": "True",
+                        "type": "Initialized"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-09-23T07:07:50Z",
+                        "status": "True",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-09-23T07:07:50Z",
+                        "status": "True",
+                        "type": "ContainersReady"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-09-23T07:07:48Z",
+                        "status": "True",
+                        "type": "PodScheduled"
+                    }
+                ],
+                "containerStatuses": [
+                    {
+                        "containerID": "containerd://b83edd3504ae39be3d27c69148d7bc05818cde77c98ff3b544deca0b2af217d7",
+                        "image": "docker.io/tongueroo/sinatra:latest",
+                        "imageID": "docker.io/tongueroo/sinatra@sha256:1dd9bc2c9188683f81fac6e86718fc88ca95dd87c88082c1d4c2aedbaf97e966",
+                        "lastState": {},
+                        "name": "sinatra",
+                        "ready": true,
+                        "restartCount": 0,
+                        "started": true,
+                        "state": {
+                            "running": {
+                                "startedAt": "2024-09-23T07:07:49Z"
+                            }
+                        }
+                    }
+                ],
+                "hostIP": "192.168.55.12",
+                "hostIPs": [
+                    {
+                        "ip": "192.168.55.12"
+                    }
+                ],
+                "phase": "Running",
+                "podIP": "192.168.62.192",
+                "podIPs": [
+                    {
+                        "ip": "192.168.62.192"
+                    }
+                ],
+                "qosClass": "BestEffort",
+                "startTime": "2024-09-23T07:07:48Z"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "data": {
+                "PASSWORD": "dDBwLVNlY3JldA==",
+                "USERNAME": "YWRtaW4xMjM="
+            },
+            "kind": "Secret",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Secret\",\"metadata\":{\"annotations\":{},\"name\":\"backend-cred-01\",\"namespace\":\"dev\"},\"stringData\":{\"PASSWORD\":\"t0p-Secret\",\"USERNAME\":\"admin123\"},\"type\":\"Opaque\"}\n"
+                },
+                "creationTimestamp": "2024-09-21T09:12:08Z",
+                "name": "backend-cred-01",
+                "namespace": "dev",
+                "resourceVersion": "843644",
+                "uid": "d37c79da-1b4a-45b8-b7f4-44850456a023"
+            },
+            "type": "Opaque"
+        },
+        {
+            "apiVersion": "v1",
+            "data": {
+                "tls.crt": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tDQpNSUlEeERDQ0FxeWdBd0lCQWdJVVo3T2svUkE1ak9iSUk1SWJBOVFaQ0gya3Ixd3dEUVlKS29aSWh2Y05BUUVMDQpCUUF3VVRFck1Da0dBMVVFQXd3aUtpNWxiR0l1WVhBdGMyOTFkR2hsWVhOMExUVXVZVzFoZW05dVlYZHpMbU52DQpiVEVMTUFrR0ExVUVCaE1DVFZreEZUQVRCZ05WQkFjTURFdDFZV3hoSUV4MWJYQjFjakFlRncweU5EQTVNakF5DQpNakE1TXpKYUZ3MHlOVEE1TWpBeU1qQTVNekphTUhzeEN6QUpCZ05WQkFZVEFrMVpNUlV3RXdZRFZRUUhEQXhMDQpkV0ZzWVNCTWRXMXdkWEl4RVRBUEJnTlZCQW9NQ0UxTWIzQnpTSFZpTVJVd0V3WURWUVFMREF4TmJHOXdjMGgxDQpZaUJFWlhZeEt6QXBCZ05WQkFNTUlpb3VaV3hpTG1Gd0xYTnZkWFJvWldGemRDMDFMbUZ0WVhwdmJtRjNjeTVqDQpiMjB3Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRRGx4NkZOT1NMYWdPcTJWYnVNDQo2WStHTmlRZEZlVXp3Qk84dWdtUVFJOFZkNkZ6Zk92VVRLV1ZtaTZ2UWtrL2pXaTc2WVNaT0NGTGVBenZXUExIDQo5RDlkazlMYXZvTGJkSk9NMFZZK0tpdURZeGxnbzRRQ2pGL3dYcGZkd2xQeTNGMVlIWkJnTldBa0YwT3NOYzFrDQpkRXFRdG1xWHp1c3ZXNDdlN3JjcWVVbWp5R0c5dWNKSlZyMUlJRjJCNFNEVGxtYm85a0l5Z3c1RlUvRG5Cdi9nDQpIK05kcmplS1ltOC9FSkFTc0Z0bnd4NnVQUWpyVWxDZFIzMnkvRHNDYWxrVHBlOVIzMTdCc1ZXOHFwNGpxUVYwDQpGckovYlUvQzRYWm45Qk1xOU8yTzRRS3lPVGZ5RGtZdmlqRVlOQ1c4ZE01VVZnY2hJT2dRaVNjZjZ1TVNWQ0pLDQpoVXExQWdNQkFBR2phakJvTUI4R0ExVWRJd1FZTUJhQUZGRWJOSXg4UHdObjByZjRuZWYzSGF6c3orK1ZNQWtHDQpBMVVkRXdRQ01BQXdDd1lEVlIwUEJBUURBZ1R3TUMwR0ExVWRFUVFtTUNTQ0lpb3VaV3hpTG1Gd0xYTnZkWFJvDQpaV0Z6ZEMwMUxtRnRZWHB2Ym1GM2N5NWpiMjB3RFFZSktvWklodmNOQVFFTEJRQURnZ0VCQUFuNXhrNXB5UCszDQpvTUZ5Y0dIaUN2SDF1Zitja1pnNjkxU1NBVHY2OUpjWk9TaktFTDdINGpKbkNkWUpvb1JrUEZkVUJ0c2VROE9mDQpLWlZCdHhLeDlXS1d2UHJ6Qjg1eDdnc1BzT29RNnl3WFJsVmszMWdRbU1YL0lEYnFrdWtydXJ3cDJocnJ0cDNHDQpRNlh3bG42eHNma0Z6bEJ6OGsza01mUStlaHpZR2ttZHEyc3YvMldmN2s4OWZLOUo4QXdGRzMwRHFPOXdURlZhDQp5d1BiRFRoT240b1g2NERGY3ZoSW12TUhFOXk3L3NqZjU2bnJkdWZsRVpUV3JDSFcyMnJWMVRUdXd3NU04cDRwDQp5UHIrL0ZaTVVYTG1pcis0V0xuZ2Fzd0p6ekZVdTVwMjdqN29taXpPWGZLNzgxRXR6YjZ6b3BZaXBJYlBVSldWDQo3dFd6V012KzJ6OD0NCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0NCg==",
+                "tls.key": "LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQ0KTUlJRW93SUJBQUtDQVFFQTVjZWhUVGtpMm9EcXRsVzdqT21QaGpZa0hSWGxNOEFUdkxvSmtFQ1BGWGVoYzN6cg0KMUV5bGxab3VyMEpKUDQxb3UrbUVtVGdoUzNnTTcxanl4L1EvWFpQUzJyNkMyM1NUak5GV1Bpb3JnMk1aWUtPRQ0KQW94ZjhGNlgzY0pUOHR4ZFdCMlFZRFZnSkJkRHJEWE5aSFJLa0xacWw4N3JMMXVPM3U2M0tubEpvOGhodmJuQw0KU1ZhOVNDQmRnZUVnMDVabTZQWkNNb01PUlZQdzV3Yi80Qi9qWGE0M2ltSnZQeENRRXJCYlo4TWVyajBJNjFKUQ0KblVkOXN2dzdBbXBaRTZYdlVkOWV3YkZWdktxZUk2a0ZkQmF5ZjIxUHd1RjJaL1FUS3ZUdGp1RUNzamszOGc1Rw0KTDRveEdEUWx2SFRPVkZZSElTRG9FSWtuSCtyakVsUWlTb1ZLdFFJREFRQUJBb0lCQUNpb0pmWlFBY2Evd01mNg0KYTNFSGNvbkEwcXNDME1kVFdTcXZrRG1oOHE5TnQ1ZURwd2F0ZVM3N1ZQOVZyemc3Z1NpZXJRT2ZWdVRQblJwTQ0KbHNpaWd3Ty93RE5NT2tNeVlWa3RRU0ZHdk9SR2lKcjgwOExQcTdvUVFyYk9SNlJWTVg4QjNDWHB5OVVXK0xaag0KM3EvRGs5My9LT1VyaTVtWmpiSU1jd1JrNlk2ODlBaERicE9pall1VmNFdG5ndXNqWWNqSDdiWTVwN09Ec0Y1eA0KaW52NG1jRE4yWU40Wks4TGJ0YWVsQ0FLWHBMYnluN0tGK2dKY2dlRUYwRWFORzdycnB6QloxTWwwOE1VZnltZg0KNHYyS3FOdDR4MC9vK2RRckJNWUJSR3AzTnI1TXRUcmU3Q1VGRlIzMXNzVitldEczc2hjY0EwRTgyU0hKbEhDRw0KemdxcDlCRUNnWUVBL0lmd1Z4cVdxS3VaM0xZL09HZGFEUVVMNlJ3V25aUmFIZW9qUXUxSjRISmQxeG4yWEpJSA0KZm1WT29WbVRFWWtkd2ZwNm9WUzUrUnBwbWVYcVc3Z1NDU05oQm1DR3I5MkJrWndNQTRzUHhPdlpFeTR1aWRtWA0KL2ZmVGZIaUZiWUJhelQ0UXU1YnFIWTlGUENiTGU5ZUlsQ2p0RVpHZHZiYjFyL1dNOVhhWXdBc0NnWUVBNk8rdQ0KODlBbU9aQ0p4ZXV4SWpSMnM0U0J2UUMyMXdNejJCQUNpVmdrdmhqNkkzcUpDTFd2MW80WERCOWFORHpUQ2ZQVQ0KK2RydlVOUEhqVTNyVmhTcVM0d3ZxWnYwQXFsZ1IzaTE1WEd3VmJzYXFtc3dSOWJ0eEhjVTJVdHdJYWdmZ2twSQ0Kek5QRGNLR0NNUFExdU9zaFFZdGMyUjRMbDF3QlZqWTZGOTNuR0Q4Q2dZQjl2azY5Z0o3T1JBd3NLNDlWVFprNA0KYkcvZTFqNm9ubXMxQkJZa3lEVUdEc3lOUS84NVh2bGVSYUdlbEJTNElaZHd0SUdGZmNQUXR3Y29PNlN6b1BkUw0KRjR6RGVTTDN4UXMwYndoSVoyRWx3KzVtTDVPNnpsOXhkWXFZS3diOVhIRmFTM0pYaGpEeklSanZkNzNRMzZUQg0KYVpPS01RRGpxNHV3MzBzZUdyeTZ1d0tCZ0hwYi9YRUJ0REtrNUZwZFZxejdGaWR5d1p3QTFncllHZEd6aDBHUw0KVmFxdUFDZkc1Rmo0NTZjeStKUmJtOHk0N3JyWnBOU2kxdmVFWjl5b1E2anlMZ3FGVnp3bk9lUjBDS2xDbFhveg0KWUVlSWc1ZGx1dlRoeUFCZDlVdTN2dTFQSFU0WnEyZzlEUHNMUEJKdkZoRlBJaWNHQi8zZE5JV0x4UC8rZUVHMQ0KUlFHTkFvR0JBTy83WHNmS2VhSTdJd0hQTXROOHJMQzlCb2xCZC94bmQ3WWxYeHRKeHZsdjhEUGJsWFQ2eVM5UQ0KTWlMM0xwZUpkTHZPSSt2aGNEZWkzRVdRUVlsUEd1eGMyTlBLLzlDYUh5czhKeGtaSjRGZmZmdWUza2g0ems3OQ0KL1JETHVSWFJrVy9YMjllZjZmUGJQZWVPcnpDRjVYZ2Y0WmpyY3BSNEJzbzdOTmZzWGw0SA0KLS0tLS1FTkQgUlNBIFBSSVZBVEUgS0VZLS0tLS0NCg=="
+            },
+            "kind": "Secret",
+            "metadata": {
+                "creationTimestamp": "2024-09-20T22:17:42Z",
+                "name": "hello-app-tls",
+                "namespace": "dev",
+                "resourceVersion": "694320",
+                "uid": "3824e700-13d9-4780-98c2-dda656e44820"
+            },
+            "type": "kubernetes.io/tls"
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "ServiceAccount",
+            "metadata": {
+                "creationTimestamp": "2024-09-20T21:43:47Z",
+                "name": "default",
+                "namespace": "dev",
+                "resourceVersion": "686613",
+                "uid": "026c7a8b-8bd1-4eb2-b6f5-6bfb28cd5ad5"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Service\",\"metadata\":{\"annotations\":{},\"labels\":{\"app\":\"hello\"},\"name\":\"hello-service\",\"namespace\":\"dev\"},\"spec\":{\"ports\":[{\"port\":80,\"protocol\":\"TCP\",\"targetPort\":8080}],\"selector\":{\"app\":\"hello\"},\"type\":\"ClusterIP\"}}\n"
+                },
+                "creationTimestamp": "2024-09-20T21:49:35Z",
+                "labels": {
+                    "app": "hello"
+                },
+                "name": "hello-service",
+                "namespace": "dev",
+                "resourceVersion": "687948",
+                "uid": "a6987eec-3709-4101-8282-923152bbcdbb"
+            },
+            "spec": {
+                "clusterIP": "10.100.206.188",
+                "clusterIPs": [
+                    "10.100.206.188"
+                ],
+                "internalTrafficPolicy": "Cluster",
+                "ipFamilies": [
+                    "IPv4"
+                ],
+                "ipFamilyPolicy": "SingleStack",
+                "ports": [
+                    {
+                        "port": 80,
+                        "protocol": "TCP",
+                        "targetPort": 8080
+                    }
+                ],
+                "selector": {
+                    "app": "hello"
+                },
+                "sessionAffinity": "None",
+                "type": "ClusterIP"
+            },
+            "status": {
+                "loadBalancer": {}
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Service\",\"metadata\":{\"annotations\":{},\"labels\":{\"app\":\"sinatra\"},\"name\":\"sinatra-service\",\"namespace\":\"dev\"},\"spec\":{\"ports\":[{\"port\":80,\"protocol\":\"TCP\",\"targetPort\":8080}],\"selector\":{\"app\":\"sinatra\"},\"type\":\"ClusterIP\"}}\n"
+                },
+                "creationTimestamp": "2024-09-21T03:39:46Z",
+                "labels": {
+                    "app": "sinatra"
+                },
+                "name": "sinatra-service",
+                "namespace": "dev",
+                "resourceVersion": "812043",
+                "uid": "83e82bae-a653-4632-b1f9-2930f3479f60"
+            },
+            "spec": {
+                "clusterIP": "10.100.95.68",
+                "clusterIPs": [
+                    "10.100.95.68"
+                ],
+                "internalTrafficPolicy": "Cluster",
+                "ipFamilies": [
+                    "IPv4"
+                ],
+                "ipFamilyPolicy": "SingleStack",
+                "ports": [
+                    {
+                        "port": 80,
+                        "protocol": "TCP",
+                        "targetPort": 8080
+                    }
+                ],
+                "selector": {
+                    "app": "sinatra"
+                },
+                "sessionAffinity": "None",
+                "type": "ClusterIP"
+            },
+            "status": {
+                "loadBalancer": {}
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "apps/v1",
+            "kind": "Deployment",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/revision": "1",
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"apps/v1\",\"kind\":\"Deployment\",\"metadata\":{\"annotations\":{},\"name\":\"hello-app\",\"namespace\":\"dev\"},\"spec\":{\"replicas\":2,\"selector\":{\"matchLabels\":{\"app\":\"hello\"}},\"template\":{\"metadata\":{\"labels\":{\"app\":\"hello\"}},\"spec\":{\"containers\":[{\"image\":\"gcr.io/google-samples/hello-app:2.0\",\"name\":\"hello\"}]}}}}\n"
+                },
+                "creationTimestamp": "2024-09-20T21:49:35Z",
+                "generation": 1,
+                "name": "hello-app",
+                "namespace": "dev",
+                "resourceVersion": "687994",
+                "uid": "4bed61ed-ffc4-4d63-8968-2de98eeda690"
+            },
+            "spec": {
+                "progressDeadlineSeconds": 600,
+                "replicas": 2,
+                "revisionHistoryLimit": 10,
+                "selector": {
+                    "matchLabels": {
+                        "app": "hello"
+                    }
+                },
+                "strategy": {
+                    "rollingUpdate": {
+                        "maxSurge": "25%",
+                        "maxUnavailable": "25%"
+                    },
+                    "type": "RollingUpdate"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "hello"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "gcr.io/google-samples/hello-app:2.0",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "hello",
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File"
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30
+                    }
+                }
+            },
+            "status": {
+                "availableReplicas": 2,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2024-09-20T21:49:43Z",
+                        "lastUpdateTime": "2024-09-20T21:49:43Z",
+                        "message": "Deployment has minimum availability.",
+                        "reason": "MinimumReplicasAvailable",
+                        "status": "True",
+                        "type": "Available"
+                    },
+                    {
+                        "lastTransitionTime": "2024-09-20T21:49:35Z",
+                        "lastUpdateTime": "2024-09-20T21:49:43Z",
+                        "message": "ReplicaSet \"hello-app-66664866cc\" has successfully progressed.",
+                        "reason": "NewReplicaSetAvailable",
+                        "status": "True",
+                        "type": "Progressing"
+                    }
+                ],
+                "observedGeneration": 1,
+                "readyReplicas": 2,
+                "replicas": 2,
+                "updatedReplicas": 2
+            }
+        },
+        {
+            "apiVersion": "apps/v1",
+            "kind": "Deployment",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/revision": "15",
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"apps/v1\",\"kind\":\"Deployment\",\"metadata\":{\"annotations\":{},\"name\":\"sinatra-app\",\"namespace\":\"dev\"},\"spec\":{\"replicas\":2,\"selector\":{\"matchLabels\":{\"app\":\"sinatra\"}},\"template\":{\"metadata\":{\"labels\":{\"app\":\"sinatra\"}},\"spec\":{\"containers\":[{\"envFrom\":[{\"prefix\":\"BACKEND_01_\",\"secretRef\":{\"name\":\"backend-cred-01\"}}],\"image\":\"tongueroo/sinatra\",\"name\":\"sinatra\",\"ports\":[{\"containerPort\":8080}],\"volumeMounts\":[{\"mountPath\":\"/app/sinatra_app.rb\",\"name\":\"sinatra-app-files-volume\",\"subPath\":\"sinatra_app.rb\"},{\"mountPath\":\"/app/views\",\"name\":\"sinatra-app-views-files-volume\"},{\"mountPath\":\"/data\",\"name\":\"persistent-storage\"}]}],\"volumes\":[{\"configMap\":{\"items\":[{\"key\":\"sinatra_app.rb\",\"path\":\"sinatra_app.rb\"}],\"name\":\"sinatra-app-files\"},\"name\":\"sinatra-app-files-volume\"},{\"configMap\":{\"name\":\"sinatra-app-views-files\"},\"name\":\"sinatra-app-views-files-volume\"},{\"name\":\"persistent-storage\",\"persistentVolumeClaim\":{\"claimName\":\"efs-claim\"}}]}}}}\n"
+                },
+                "creationTimestamp": "2024-09-21T03:39:46Z",
+                "generation": 53,
+                "name": "sinatra-app",
+                "namespace": "dev",
+                "resourceVersion": "1585342",
+                "uid": "0cc1f7f8-512b-426c-9133-d11fa17969e2"
+            },
+            "spec": {
+                "progressDeadlineSeconds": 600,
+                "replicas": 2,
+                "revisionHistoryLimit": 10,
+                "selector": {
+                    "matchLabels": {
+                        "app": "sinatra"
+                    }
+                },
+                "strategy": {
+                    "rollingUpdate": {
+                        "maxSurge": "25%",
+                        "maxUnavailable": "25%"
+                    },
+                    "type": "RollingUpdate"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "sinatra"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "envFrom": [
+                                    {
+                                        "prefix": "BACKEND_01_",
+                                        "secretRef": {
+                                            "name": "backend-cred-01"
+                                        }
+                                    }
+                                ],
+                                "image": "tongueroo/sinatra",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "sinatra",
+                                "ports": [
+                                    {
+                                        "containerPort": 8080,
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File",
+                                "volumeMounts": [
+                                    {
+                                        "mountPath": "/app/sinatra_app.rb",
+                                        "name": "sinatra-app-files-volume",
+                                        "subPath": "sinatra_app.rb"
+                                    },
+                                    {
+                                        "mountPath": "/app/views",
+                                        "name": "sinatra-app-views-files-volume"
+                                    },
+                                    {
+                                        "mountPath": "/data",
+                                        "name": "persistent-storage"
+                                    }
+                                ]
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30,
+                        "volumes": [
+                            {
+                                "configMap": {
+                                    "defaultMode": 420,
+                                    "items": [
+                                        {
+                                            "key": "sinatra_app.rb",
+                                            "path": "sinatra_app.rb"
+                                        }
+                                    ],
+                                    "name": "sinatra-app-files"
+                                },
+                                "name": "sinatra-app-files-volume"
+                            },
+                            {
+                                "configMap": {
+                                    "defaultMode": 420,
+                                    "name": "sinatra-app-views-files"
+                                },
+                                "name": "sinatra-app-views-files-volume"
+                            },
+                            {
+                                "name": "persistent-storage",
+                                "persistentVolumeClaim": {
+                                    "claimName": "efs-claim"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "status": {
+                "availableReplicas": 2,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2024-09-22T07:31:43Z",
+                        "lastUpdateTime": "2024-09-22T07:31:43Z",
+                        "message": "ReplicaSet \"sinatra-app-8678f86cb7\" has successfully progressed.",
+                        "reason": "NewReplicaSetAvailable",
+                        "status": "True",
+                        "type": "Progressing"
+                    },
+                    {
+                        "lastTransitionTime": "2024-09-23T07:07:50Z",
+                        "lastUpdateTime": "2024-09-23T07:07:50Z",
+                        "message": "Deployment has minimum availability.",
+                        "reason": "MinimumReplicasAvailable",
+                        "status": "True",
+                        "type": "Available"
+                    }
+                ],
+                "observedGeneration": 53,
+                "readyReplicas": 2,
+                "replicas": 2,
+                "updatedReplicas": 2
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "apps/v1",
+            "kind": "ReplicaSet",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/desired-replicas": "2",
+                    "deployment.kubernetes.io/max-replicas": "3",
+                    "deployment.kubernetes.io/revision": "1"
+                },
+                "creationTimestamp": "2024-09-20T21:49:35Z",
+                "generation": 1,
+                "labels": {
+                    "app": "hello",
+                    "pod-template-hash": "66664866cc"
+                },
+                "name": "hello-app-66664866cc",
+                "namespace": "dev",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "Deployment",
+                        "name": "hello-app",
+                        "uid": "4bed61ed-ffc4-4d63-8968-2de98eeda690"
+                    }
+                ],
+                "resourceVersion": "687991",
+                "uid": "f5e22bf4-9e7c-484b-91ce-28ccd42036ea"
+            },
+            "spec": {
+                "replicas": 2,
+                "selector": {
+                    "matchLabels": {
+                        "app": "hello",
+                        "pod-template-hash": "66664866cc"
+                    }
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "hello",
+                            "pod-template-hash": "66664866cc"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "gcr.io/google-samples/hello-app:2.0",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "hello",
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File"
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30
+                    }
+                }
+            },
+            "status": {
+                "availableReplicas": 2,
+                "fullyLabeledReplicas": 2,
+                "observedGeneration": 1,
+                "readyReplicas": 2,
+                "replicas": 2
+            }
+        },
+        {
+            "apiVersion": "apps/v1",
+            "kind": "ReplicaSet",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/desired-replicas": "2",
+                    "deployment.kubernetes.io/max-replicas": "3",
+                    "deployment.kubernetes.io/revision": "11"
+                },
+                "creationTimestamp": "2024-09-21T09:20:00Z",
+                "generation": 6,
+                "labels": {
+                    "app": "sinatra",
+                    "pod-template-hash": "5667b9fcb6"
+                },
+                "name": "sinatra-app-5667b9fcb6",
+                "namespace": "dev",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "Deployment",
+                        "name": "sinatra-app",
+                        "uid": "0cc1f7f8-512b-426c-9133-d11fa17969e2"
+                    }
+                ],
+                "resourceVersion": "848266",
+                "uid": "5cf188e5-10c0-4a67-8a87-8855166153e1"
+            },
+            "spec": {
+                "replicas": 0,
+                "selector": {
+                    "matchLabels": {
+                        "app": "sinatra",
+                        "pod-template-hash": "5667b9fcb6"
+                    }
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "sinatra",
+                            "pod-template-hash": "5667b9fcb6"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "tongueroo/sinatra",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "sinatra",
+                                "ports": [
+                                    {
+                                        "containerPort": 8080,
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File",
+                                "volumeMounts": [
+                                    {
+                                        "mountPath": "/app",
+                                        "name": "sinatra-app-files-volume"
+                                    },
+                                    {
+                                        "mountPath": "/app/views",
+                                        "name": "sinatra-app-views-files-volume"
+                                    }
+                                ]
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30,
+                        "volumes": [
+                            {
+                                "configMap": {
+                                    "defaultMode": 420,
+                                    "name": "sinatra-app-files"
+                                },
+                                "name": "sinatra-app-files-volume"
+                            },
+                            {
+                                "configMap": {
+                                    "defaultMode": 420,
+                                    "name": "sinatra-app-views-files"
+                                },
+                                "name": "sinatra-app-views-files-volume"
+                            }
+                        ]
+                    }
+                }
+            },
+            "status": {
+                "observedGeneration": 6,
+                "replicas": 0
+            }
+        },
+        {
+            "apiVersion": "apps/v1",
+            "kind": "ReplicaSet",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/desired-replicas": "2",
+                    "deployment.kubernetes.io/max-replicas": "3",
+                    "deployment.kubernetes.io/revision": "10"
+                },
+                "creationTimestamp": "2024-09-21T09:13:37Z",
+                "generation": 2,
+                "labels": {
+                    "app": "sinatra",
+                    "pod-template-hash": "58c46d7f4c"
+                },
+                "name": "sinatra-app-58c46d7f4c",
+                "namespace": "dev",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "Deployment",
+                        "name": "sinatra-app",
+                        "uid": "0cc1f7f8-512b-426c-9133-d11fa17969e2"
+                    }
+                ],
+                "resourceVersion": "845487",
+                "uid": "fbb44272-a6a9-497b-99e6-7714f6954baa"
+            },
+            "spec": {
+                "replicas": 0,
+                "selector": {
+                    "matchLabels": {
+                        "app": "sinatra",
+                        "pod-template-hash": "58c46d7f4c"
+                    }
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "sinatra",
+                            "pod-template-hash": "58c46d7f4c"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "envFrom": [
+                                    {
+                                        "prefix": "BACKEND_01_",
+                                        "secretRef": {
+                                            "name": "backend-cred-01"
+                                        }
+                                    }
+                                ],
+                                "image": "tongueroo/sinatra",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "sinatra",
+                                "ports": [
+                                    {
+                                        "containerPort": 8080,
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File",
+                                "volumeMounts": [
+                                    {
+                                        "mountPath": "/app",
+                                        "name": "sinatra-app-files-volume"
+                                    },
+                                    {
+                                        "mountPath": "/app/views",
+                                        "name": "sinatra-app-views-files-volume"
+                                    }
+                                ]
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30,
+                        "volumes": [
+                            {
+                                "configMap": {
+                                    "defaultMode": 420,
+                                    "name": "sinatra-app-files"
+                                },
+                                "name": "sinatra-app-files-volume"
+                            },
+                            {
+                                "configMap": {
+                                    "defaultMode": 420,
+                                    "name": "sinatra-app-views-files"
+                                },
+                                "name": "sinatra-app-views-files-volume"
+                            }
+                        ]
+                    }
+                }
+            },
+            "status": {
+                "observedGeneration": 2,
+                "replicas": 0
+            }
+        },
+        {
+            "apiVersion": "apps/v1",
+            "kind": "ReplicaSet",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/desired-replicas": "2",
+                    "deployment.kubernetes.io/max-replicas": "3",
+                    "deployment.kubernetes.io/revision": "13"
+                },
+                "creationTimestamp": "2024-09-21T09:44:09Z",
+                "generation": 4,
+                "labels": {
+                    "app": "sinatra",
+                    "pod-template-hash": "6459856d64"
+                },
+                "name": "sinatra-app-6459856d64",
+                "namespace": "dev",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "Deployment",
+                        "name": "sinatra-app",
+                        "uid": "0cc1f7f8-512b-426c-9133-d11fa17969e2"
+                    }
+                ],
+                "resourceVersion": "853656",
+                "uid": "7c3bdb3d-6290-4ef2-bbab-654149241a67"
+            },
+            "spec": {
+                "replicas": 0,
+                "selector": {
+                    "matchLabels": {
+                        "app": "sinatra",
+                        "pod-template-hash": "6459856d64"
+                    }
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "sinatra",
+                            "pod-template-hash": "6459856d64"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "envFrom": [
+                                    {
+                                        "prefix": "BACKEND_01_",
+                                        "secretRef": {
+                                            "name": "backend-cred-01"
+                                        }
+                                    }
+                                ],
+                                "image": "tongueroo/sinatra",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "sinatra",
+                                "ports": [
+                                    {
+                                        "containerPort": 8080,
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File",
+                                "volumeMounts": [
+                                    {
+                                        "mountPath": "/app/views",
+                                        "name": "sinatra-app-views-files-volume"
+                                    }
+                                ]
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30,
+                        "volumes": [
+                            {
+                                "configMap": {
+                                    "defaultMode": 420,
+                                    "name": "sinatra-app-files"
+                                },
+                                "name": "sinatra-app-files-volume"
+                            },
+                            {
+                                "configMap": {
+                                    "defaultMode": 420,
+                                    "name": "sinatra-app-views-files"
+                                },
+                                "name": "sinatra-app-views-files-volume"
+                            }
+                        ]
+                    }
+                }
+            },
+            "status": {
+                "observedGeneration": 4,
+                "replicas": 0
+            }
+        },
+        {
+            "apiVersion": "apps/v1",
+            "kind": "ReplicaSet",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/desired-replicas": "2",
+                    "deployment.kubernetes.io/max-replicas": "3",
+                    "deployment.kubernetes.io/revision": "6"
+                },
+                "creationTimestamp": "2024-09-21T04:49:03Z",
+                "generation": 4,
+                "labels": {
+                    "app": "sinatra",
+                    "pod-template-hash": "6647549985"
+                },
+                "name": "sinatra-app-6647549985",
+                "namespace": "dev",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "Deployment",
+                        "name": "sinatra-app",
+                        "uid": "0cc1f7f8-512b-426c-9133-d11fa17969e2"
+                    }
+                ],
+                "resourceVersion": "785504",
+                "uid": "cc2d1b9a-34a5-424b-babe-affefa073e58"
+            },
+            "spec": {
+                "replicas": 0,
+                "selector": {
+                    "matchLabels": {
+                        "app": "sinatra",
+                        "pod-template-hash": "6647549985"
+                    }
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "sinatra",
+                            "pod-template-hash": "6647549985"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "tongueroo/sinatra",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "sinatra",
+                                "ports": [
+                                    {
+                                        "containerPort": 4567,
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File",
+                                "volumeMounts": [
+                                    {
+                                        "mountPath": "/usr/src/app",
+                                        "name": "sinatra-main-app-file-volume"
+                                    }
+                                ]
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30,
+                        "volumes": [
+                            {
+                                "configMap": {
+                                    "defaultMode": 420,
+                                    "name": "sinatra-main-app-file"
+                                },
+                                "name": "sinatra-main-app-file-volume"
+                            }
+                        ]
+                    }
+                }
+            },
+            "status": {
+                "observedGeneration": 4,
+                "replicas": 0
+            }
+        },
+        {
+            "apiVersion": "apps/v1",
+            "kind": "ReplicaSet",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/desired-replicas": "2",
+                    "deployment.kubernetes.io/max-replicas": "3",
+                    "deployment.kubernetes.io/revision": "12",
+                    "deployment.kubernetes.io/revision-history": "9"
+                },
+                "creationTimestamp": "2024-09-21T07:12:37Z",
+                "generation": 10,
+                "labels": {
+                    "app": "sinatra",
+                    "pod-template-hash": "68499d67b5"
+                },
+                "name": "sinatra-app-68499d67b5",
+                "namespace": "dev",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "Deployment",
+                        "name": "sinatra-app",
+                        "uid": "0cc1f7f8-512b-426c-9133-d11fa17969e2"
+                    }
+                ],
+                "resourceVersion": "851306",
+                "uid": "13f516bb-b3b5-49db-b0c2-ee97fb8def33"
+            },
+            "spec": {
+                "replicas": 0,
+                "selector": {
+                    "matchLabels": {
+                        "app": "sinatra",
+                        "pod-template-hash": "68499d67b5"
+                    }
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "sinatra",
+                            "pod-template-hash": "68499d67b5"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "tongueroo/sinatra",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "sinatra",
+                                "ports": [
+                                    {
+                                        "containerPort": 8080,
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File",
+                                "volumeMounts": [
+                                    {
+                                        "mountPath": "/app/views",
+                                        "name": "sinatra-app-views-files-volume"
+                                    }
+                                ]
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30,
+                        "volumes": [
+                            {
+                                "configMap": {
+                                    "defaultMode": 420,
+                                    "name": "sinatra-app-files"
+                                },
+                                "name": "sinatra-app-files-volume"
+                            },
+                            {
+                                "configMap": {
+                                    "defaultMode": 420,
+                                    "name": "sinatra-app-views-files"
+                                },
+                                "name": "sinatra-app-views-files-volume"
+                            }
+                        ]
+                    }
+                }
+            },
+            "status": {
+                "observedGeneration": 10,
+                "replicas": 0
+            }
+        },
+        {
+            "apiVersion": "apps/v1",
+            "kind": "ReplicaSet",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/desired-replicas": "2",
+                    "deployment.kubernetes.io/max-replicas": "3",
+                    "deployment.kubernetes.io/revision": "8"
+                },
+                "creationTimestamp": "2024-09-21T06:56:58Z",
+                "generation": 2,
+                "labels": {
+                    "app": "sinatra",
+                    "pod-template-hash": "684b8bbb69"
+                },
+                "name": "sinatra-app-684b8bbb69",
+                "namespace": "dev",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "Deployment",
+                        "name": "sinatra-app",
+                        "uid": "0cc1f7f8-512b-426c-9133-d11fa17969e2"
+                    }
+                ],
+                "resourceVersion": "816568",
+                "uid": "985601a5-c2a6-4b9a-8287-d0d6cb8f9a69"
+            },
+            "spec": {
+                "replicas": 0,
+                "selector": {
+                    "matchLabels": {
+                        "app": "sinatra",
+                        "pod-template-hash": "684b8bbb69"
+                    }
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "sinatra",
+                            "pod-template-hash": "684b8bbb69"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "tongueroo/sinatra",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "sinatra",
+                                "ports": [
+                                    {
+                                        "containerPort": 8080,
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File",
+                                "volumeMounts": [
+                                    {
+                                        "mountPath": "/app",
+                                        "name": "sinatra-main-app-file-volume"
+                                    }
+                                ]
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30,
+                        "volumes": [
+                            {
+                                "configMap": {
+                                    "defaultMode": 420,
+                                    "name": "sinatra-main-app-file"
+                                },
+                                "name": "sinatra-main-app-file-volume"
+                            }
+                        ]
+                    }
+                }
+            },
+            "status": {
+                "observedGeneration": 2,
+                "replicas": 0
+            }
+        },
+        {
+            "apiVersion": "apps/v1",
+            "kind": "ReplicaSet",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/desired-replicas": "2",
+                    "deployment.kubernetes.io/max-replicas": "3",
+                    "deployment.kubernetes.io/revision": "5"
+                },
+                "creationTimestamp": "2024-09-21T04:38:51Z",
+                "generation": 4,
+                "labels": {
+                    "app": "sinatra",
+                    "pod-template-hash": "69f45479d"
+                },
+                "name": "sinatra-app-69f45479d",
+                "namespace": "dev",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "Deployment",
+                        "name": "sinatra-app",
+                        "uid": "0cc1f7f8-512b-426c-9133-d11fa17969e2"
+                    }
+                ],
+                "resourceVersion": "784024",
+                "uid": "1aa4c48a-5bd1-4e4b-abb6-72c0944b7d68"
+            },
+            "spec": {
+                "replicas": 0,
+                "selector": {
+                    "matchLabels": {
+                        "app": "sinatra",
+                        "pod-template-hash": "69f45479d"
+                    }
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "sinatra",
+                            "pod-template-hash": "69f45479d"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "erikap/ruby-sinatra:feature-woodpecker-builds",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "sinatra",
+                                "ports": [
+                                    {
+                                        "containerPort": 80,
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File",
+                                "volumeMounts": [
+                                    {
+                                        "mountPath": "/usr/src/app",
+                                        "name": "sinatra-main-app-file-volume"
+                                    }
+                                ]
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30,
+                        "volumes": [
+                            {
+                                "configMap": {
+                                    "defaultMode": 420,
+                                    "name": "sinatra-main-app-file"
+                                },
+                                "name": "sinatra-main-app-file-volume"
+                            }
+                        ]
+                    }
+                }
+            },
+            "status": {
+                "observedGeneration": 4,
+                "replicas": 0
+            }
+        },
+        {
+            "apiVersion": "apps/v1",
+            "kind": "ReplicaSet",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/desired-replicas": "2",
+                    "deployment.kubernetes.io/max-replicas": "3",
+                    "deployment.kubernetes.io/revision": "4"
+                },
+                "creationTimestamp": "2024-09-21T04:27:58Z",
+                "generation": 4,
+                "labels": {
+                    "app": "sinatra",
+                    "pod-template-hash": "6d6b747dbb"
+                },
+                "name": "sinatra-app-6d6b747dbb",
+                "namespace": "dev",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "Deployment",
+                        "name": "sinatra-app",
+                        "uid": "0cc1f7f8-512b-426c-9133-d11fa17969e2"
+                    }
+                ],
+                "resourceVersion": "781426",
+                "uid": "30599f83-da82-499a-96f7-ae9bd93a6c29"
+            },
+            "spec": {
+                "replicas": 0,
+                "selector": {
+                    "matchLabels": {
+                        "app": "sinatra",
+                        "pod-template-hash": "6d6b747dbb"
+                    }
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "sinatra",
+                            "pod-template-hash": "6d6b747dbb"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "erikap/ruby-sinatra:1.1.0",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "sinatra",
+                                "ports": [
+                                    {
+                                        "containerPort": 80,
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File",
+                                "volumeMounts": [
+                                    {
+                                        "mountPath": "/usr/src/app",
+                                        "name": "sinatra-main-app-file-volume"
+                                    }
+                                ]
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30,
+                        "volumes": [
+                            {
+                                "configMap": {
+                                    "defaultMode": 420,
+                                    "name": "sinatra-main-app-file"
+                                },
+                                "name": "sinatra-main-app-file-volume"
+                            }
+                        ]
+                    }
+                }
+            },
+            "status": {
+                "observedGeneration": 4,
+                "replicas": 0
+            }
+        },
+        {
+            "apiVersion": "apps/v1",
+            "kind": "ReplicaSet",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/desired-replicas": "0",
+                    "deployment.kubernetes.io/max-replicas": "0",
+                    "deployment.kubernetes.io/revision": "14"
+                },
+                "creationTimestamp": "2024-09-21T09:54:14Z",
+                "generation": 11,
+                "labels": {
+                    "app": "sinatra",
+                    "pod-template-hash": "75b9d4d556"
+                },
+                "name": "sinatra-app-75b9d4d556",
+                "namespace": "dev",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "Deployment",
+                        "name": "sinatra-app",
+                        "uid": "0cc1f7f8-512b-426c-9133-d11fa17969e2"
+                    }
+                ],
+                "resourceVersion": "1177837",
+                "uid": "6444151a-2aef-43d2-aa6e-069aadffccbb"
+            },
+            "spec": {
+                "replicas": 0,
+                "selector": {
+                    "matchLabels": {
+                        "app": "sinatra",
+                        "pod-template-hash": "75b9d4d556"
+                    }
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "sinatra",
+                            "pod-template-hash": "75b9d4d556"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "envFrom": [
+                                    {
+                                        "prefix": "BACKEND_01_",
+                                        "secretRef": {
+                                            "name": "backend-cred-01"
+                                        }
+                                    }
+                                ],
+                                "image": "tongueroo/sinatra",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "sinatra",
+                                "ports": [
+                                    {
+                                        "containerPort": 8080,
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File",
+                                "volumeMounts": [
+                                    {
+                                        "mountPath": "/app/sinatra_app.rb",
+                                        "name": "sinatra-app-files-volume",
+                                        "subPath": "sinatra_app.rb"
+                                    },
+                                    {
+                                        "mountPath": "/app/views",
+                                        "name": "sinatra-app-views-files-volume"
+                                    }
+                                ]
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30,
+                        "volumes": [
+                            {
+                                "configMap": {
+                                    "defaultMode": 420,
+                                    "items": [
+                                        {
+                                            "key": "sinatra_app.rb",
+                                            "path": "sinatra_app.rb"
+                                        }
+                                    ],
+                                    "name": "sinatra-app-files"
+                                },
+                                "name": "sinatra-app-files-volume"
+                            },
+                            {
+                                "configMap": {
+                                    "defaultMode": 420,
+                                    "name": "sinatra-app-views-files"
+                                },
+                                "name": "sinatra-app-views-files-volume"
+                            }
+                        ]
+                    }
+                }
+            },
+            "status": {
+                "observedGeneration": 11,
+                "replicas": 0
+            }
+        },
+        {
+            "apiVersion": "apps/v1",
+            "kind": "ReplicaSet",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/desired-replicas": "2",
+                    "deployment.kubernetes.io/max-replicas": "3",
+                    "deployment.kubernetes.io/revision": "7"
+                },
+                "creationTimestamp": "2024-09-21T04:55:25Z",
+                "generation": 4,
+                "labels": {
+                    "app": "sinatra",
+                    "pod-template-hash": "75db7fbddf"
+                },
+                "name": "sinatra-app-75db7fbddf",
+                "namespace": "dev",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "Deployment",
+                        "name": "sinatra-app",
+                        "uid": "0cc1f7f8-512b-426c-9133-d11fa17969e2"
+                    }
+                ],
+                "resourceVersion": "816644",
+                "uid": "b84cc229-4346-41f5-96b3-aa55c5e89ce5"
+            },
+            "spec": {
+                "replicas": 0,
+                "selector": {
+                    "matchLabels": {
+                        "app": "sinatra",
+                        "pod-template-hash": "75db7fbddf"
+                    }
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "sinatra",
+                            "pod-template-hash": "75db7fbddf"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "tongueroo/sinatra",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "sinatra",
+                                "ports": [
+                                    {
+                                        "containerPort": 8080,
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File",
+                                "volumeMounts": [
+                                    {
+                                        "mountPath": "/usr/src/app",
+                                        "name": "sinatra-main-app-file-volume"
+                                    }
+                                ]
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30,
+                        "volumes": [
+                            {
+                                "configMap": {
+                                    "defaultMode": 420,
+                                    "name": "sinatra-main-app-file"
+                                },
+                                "name": "sinatra-main-app-file-volume"
+                            }
+                        ]
+                    }
+                }
+            },
+            "status": {
+                "observedGeneration": 4,
+                "replicas": 0
+            }
+        },
+        {
+            "apiVersion": "apps/v1",
+            "kind": "ReplicaSet",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/desired-replicas": "2",
+                    "deployment.kubernetes.io/max-replicas": "3",
+                    "deployment.kubernetes.io/revision": "15"
+                },
+                "creationTimestamp": "2024-09-22T07:16:23Z",
+                "generation": 27,
+                "labels": {
+                    "app": "sinatra",
+                    "pod-template-hash": "8678f86cb7"
+                },
+                "name": "sinatra-app-8678f86cb7",
+                "namespace": "dev",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "Deployment",
+                        "name": "sinatra-app",
+                        "uid": "0cc1f7f8-512b-426c-9133-d11fa17969e2"
+                    }
+                ],
+                "resourceVersion": "1585341",
+                "uid": "1255c82d-da3c-4b50-bad5-91ba76c90fcc"
+            },
+            "spec": {
+                "replicas": 2,
+                "selector": {
+                    "matchLabels": {
+                        "app": "sinatra",
+                        "pod-template-hash": "8678f86cb7"
+                    }
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "sinatra",
+                            "pod-template-hash": "8678f86cb7"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "envFrom": [
+                                    {
+                                        "prefix": "BACKEND_01_",
+                                        "secretRef": {
+                                            "name": "backend-cred-01"
+                                        }
+                                    }
+                                ],
+                                "image": "tongueroo/sinatra",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "sinatra",
+                                "ports": [
+                                    {
+                                        "containerPort": 8080,
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File",
+                                "volumeMounts": [
+                                    {
+                                        "mountPath": "/app/sinatra_app.rb",
+                                        "name": "sinatra-app-files-volume",
+                                        "subPath": "sinatra_app.rb"
+                                    },
+                                    {
+                                        "mountPath": "/app/views",
+                                        "name": "sinatra-app-views-files-volume"
+                                    },
+                                    {
+                                        "mountPath": "/data",
+                                        "name": "persistent-storage"
+                                    }
+                                ]
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30,
+                        "volumes": [
+                            {
+                                "configMap": {
+                                    "defaultMode": 420,
+                                    "items": [
+                                        {
+                                            "key": "sinatra_app.rb",
+                                            "path": "sinatra_app.rb"
+                                        }
+                                    ],
+                                    "name": "sinatra-app-files"
+                                },
+                                "name": "sinatra-app-files-volume"
+                            },
+                            {
+                                "configMap": {
+                                    "defaultMode": 420,
+                                    "name": "sinatra-app-views-files"
+                                },
+                                "name": "sinatra-app-views-files-volume"
+                            },
+                            {
+                                "name": "persistent-storage",
+                                "persistentVolumeClaim": {
+                                    "claimName": "efs-claim"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "status": {
+                "availableReplicas": 2,
+                "fullyLabeledReplicas": 2,
+                "observedGeneration": 27,
+                "readyReplicas": 2,
+                "replicas": 2
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "addressType": "IPv4",
+            "apiVersion": "discovery.k8s.io/v1",
+            "endpoints": [
+                {
+                    "addresses": [
+                        "192.168.4.55"
+                    ],
+                    "conditions": {
+                        "ready": true,
+                        "serving": true,
+                        "terminating": false
+                    },
+                    "nodeName": "ip-192-168-1-153.ap-southeast-5.compute.internal",
+                    "targetRef": {
+                        "kind": "Pod",
+                        "name": "hello-app-66664866cc-wqkjg",
+                        "namespace": "dev",
+                        "uid": "54f9c49e-eb4f-40ae-afab-127b8766ad2b"
+                    },
+                    "zone": "ap-southeast-5a"
+                },
+                {
+                    "addresses": [
+                        "192.168.54.170"
+                    ],
+                    "conditions": {
+                        "ready": true,
+                        "serving": true,
+                        "terminating": false
+                    },
+                    "nodeName": "ip-192-168-55-12.ap-southeast-5.compute.internal",
+                    "targetRef": {
+                        "kind": "Pod",
+                        "name": "hello-app-66664866cc-xm5wz",
+                        "namespace": "dev",
+                        "uid": "427a8ad8-8b8b-4ca9-9d82-0a7e481d201d"
+                    },
+                    "zone": "ap-southeast-5b"
+                }
+            ],
+            "kind": "EndpointSlice",
+            "metadata": {
+                "annotations": {
+                    "endpoints.kubernetes.io/last-change-trigger-time": "2024-09-20T21:49:43Z"
+                },
+                "creationTimestamp": "2024-09-20T21:49:35Z",
+                "generateName": "hello-service-",
+                "generation": 3,
+                "labels": {
+                    "app": "hello",
+                    "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+                    "kubernetes.io/service-name": "hello-service"
+                },
+                "name": "hello-service-zzs2l",
+                "namespace": "dev",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "Service",
+                        "name": "hello-service",
+                        "uid": "a6987eec-3709-4101-8282-923152bbcdbb"
+                    }
+                ],
+                "resourceVersion": "687993",
+                "uid": "01e9779a-26d1-4cb0-a1c8-cb99a4fa320f"
+            },
+            "ports": [
+                {
+                    "name": "",
+                    "port": 8080,
+                    "protocol": "TCP"
+                }
+            ]
+        },
+        {
+            "addressType": "IPv4",
+            "apiVersion": "discovery.k8s.io/v1",
+            "endpoints": [
+                {
+                    "addresses": [
+                        "192.168.21.226"
+                    ],
+                    "conditions": {
+                        "ready": true,
+                        "serving": true,
+                        "terminating": false
+                    },
+                    "nodeName": "ip-192-168-1-153.ap-southeast-5.compute.internal",
+                    "targetRef": {
+                        "kind": "Pod",
+                        "name": "sinatra-app-8678f86cb7-dxwlc",
+                        "namespace": "dev",
+                        "uid": "42812b9d-fced-482d-b458-cd0f215cb627"
+                    },
+                    "zone": "ap-southeast-5a"
+                },
+                {
+                    "addresses": [
+                        "192.168.62.192"
+                    ],
+                    "conditions": {
+                        "ready": true,
+                        "serving": true,
+                        "terminating": false
+                    },
+                    "nodeName": "ip-192-168-55-12.ap-southeast-5.compute.internal",
+                    "targetRef": {
+                        "kind": "Pod",
+                        "name": "sinatra-app-8678f86cb7-zph6x",
+                        "namespace": "dev",
+                        "uid": "ee4f421f-0f39-44c2-8ebb-2615df760cc3"
+                    },
+                    "zone": "ap-southeast-5b"
+                }
+            ],
+            "kind": "EndpointSlice",
+            "metadata": {
+                "annotations": {
+                    "endpoints.kubernetes.io/last-change-trigger-time": "2024-09-23T07:07:50Z"
+                },
+                "creationTimestamp": "2024-09-21T03:39:46Z",
+                "generateName": "sinatra-service-",
+                "generation": 270,
+                "labels": {
+                    "app": "sinatra",
+                    "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+                    "kubernetes.io/service-name": "sinatra-service"
+                },
+                "name": "sinatra-service-hnq5w",
+                "namespace": "dev",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "Service",
+                        "name": "sinatra-service",
+                        "uid": "83e82bae-a653-4632-b1f9-2930f3479f60"
+                    }
+                ],
+                "resourceVersion": "1585340",
+                "uid": "3c583e8a-b230-46fd-970a-272308c11df3"
+            },
+            "ports": [
+                {
+                    "name": "",
+                    "port": 8080,
+                    "protocol": "TCP"
+                }
+            ]
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "networking.k8s.io/v1",
+            "kind": "Ingress",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"networking.k8s.io/v1\",\"kind\":\"Ingress\",\"metadata\":{\"annotations\":{},\"name\":\"hello-app-ingress\",\"namespace\":\"dev\"},\"spec\":{\"ingressClassName\":\"nginx\",\"rules\":[{\"host\":\"k8s-ingressn-ingressn-97593d84d2-be42322631ec4446.elb.ap-southeast-5.amazonaws.com\",\"http\":{\"paths\":[{\"backend\":{\"service\":{\"name\":\"sinatra-service\",\"port\":{\"number\":80}}},\"path\":\"/\",\"pathType\":\"Prefix\"},{\"backend\":{\"service\":{\"name\":\"hello-service\",\"port\":{\"number\":80}}},\"path\":\"/hello\",\"pathType\":\"Prefix\"}]}}],\"tls\":[{\"hosts\":[\"k8s-ingressn-ingressn-97593d84d2-be42322631ec4446.elb.ap-southeast-5.amazonaws.com\"],\"secretName\":\"hello-app-tls\"}]}}\n"
+                },
+                "creationTimestamp": "2024-09-20T22:27:30Z",
+                "generation": 8,
+                "name": "hello-app-ingress",
+                "namespace": "dev",
+                "resourceVersion": "811923",
+                "uid": "c9291806-2d53-4c81-b2da-aa77257a19b6"
+            },
+            "spec": {
+                "ingressClassName": "nginx",
+                "rules": [
+                    {
+                        "host": "k8s-ingressn-ingressn-97593d84d2-be42322631ec4446.elb.ap-southeast-5.amazonaws.com",
+                        "http": {
+                            "paths": [
+                                {
+                                    "backend": {
+                                        "service": {
+                                            "name": "sinatra-service",
+                                            "port": {
+                                                "number": 80
+                                            }
+                                        }
+                                    },
+                                    "path": "/",
+                                    "pathType": "Prefix"
+                                },
+                                {
+                                    "backend": {
+                                        "service": {
+                                            "name": "hello-service",
+                                            "port": {
+                                                "number": 80
+                                            }
+                                        }
+                                    },
+                                    "path": "/hello",
+                                    "pathType": "Prefix"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "tls": [
+                    {
+                        "hosts": [
+                            "k8s-ingressn-ingressn-97593d84d2-be42322631ec4446.elb.ap-southeast-5.amazonaws.com"
+                        ],
+                        "secretName": "hello-app-tls"
+                    }
+                ]
+            },
+            "status": {
+                "loadBalancer": {
+                    "ingress": [
+                        {
+                            "ip": "43.217.2.109"
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}
